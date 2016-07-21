@@ -1,0 +1,21 @@
+.ctas {
+	overflow: hidden;
+}
+
+.ctas__cta {
+	display: block;
+	float: none;
+	font-size: 1.5em;
+	margin: 0 auto .625em;
+	width: 90%;
+
+	@include media($large-screen) {
+		@include span-columns(3);
+	}
+}
+
+.ctas__cta:first-child {
+	@include media($large-screen) {
+		@include shift(3);
+	}
+}

@@ -1,0 +1,38 @@
+$small-screen: 21.875em;
+$medium-screen: 37.5em;
+$large-screen: 56.25em;
+
+$white: #fff;
+$blue: #4f70d6;
+$black: #283137;
+$orange: #ff933a;
+$pink: #94379f;
+
+%outer-container {
+	@include outer-container();
+}
+
+%row {
+	@include row();
+}
+
+%row-padd {
+	padding-left: em(20);
+	padding-right: em(20);
+
+	@include media(min-width 85em) {
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+body {
+	font-family: 'ProximaOpenShare';
+	-webkit-font-smoothing: antialiased;
+	font-weight: 400;
+}
+
+a {
+	color: $blue;
+	text-decoration: none;
+}
