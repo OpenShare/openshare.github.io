@@ -25,6 +25,7 @@
     "watch": "npm run watch:js & npm run watch:css",
     "build:js": "browserify browser/js/index.js -g uglifyify | uglifyjs -cm > browser/dist/bundle.js",
     "build:css": "node-sass browser/scss/main.scss browser/dist/bundle.css",
+    "build": "npm run build:js & npm run build:css",
     "dev": "npm run watch & npm start",
     "production": "npm run build & npm start",
     "lint": "eslint **/*.js",
@@ -53,7 +54,7 @@
   },
   "dependencies": {
     "body": "^5.1.0",
-    "open-share": "^1.2.0",
+    "open-share": "^1.2.3",
     "oppressor": "0.0.1",
     "patterns": "^1.0.2",
     "st": "^1.1.0",
