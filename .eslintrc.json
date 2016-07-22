@@ -10,6 +10,12 @@
           "capIsNew": false
         }
       ],
+	  "no-new": 0,
+	  "no-console": 0,
+	  "new-cap": 0,
+	  "global-require": 0,
+	  "one-var": 0,
+      "indent": ["error", "tab"],
       "consistent-return": 2,
       "no-underscore-dangle": 0
     }
