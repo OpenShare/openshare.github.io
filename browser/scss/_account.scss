@@ -12,7 +12,14 @@
 .account__inner {
 	@extend %row-padd;
 	@extend %outer-container;
+	line-height: 1.5;
 	padding-top: 2.5em;
+}
+
+.account__instruction {
+	@include media($large-screen) {
+		max-width: 80%;
+	}
 }
 
 .account__avatar {
@@ -31,13 +38,17 @@
 	text-align: center;
 }
 
-.account__block {
-	margin-top: 1.875em;
+.account__username {
+	line-height: 1.5;
+	margin: 0 auto;
+	font-weight: bold;
+	font-size: 1.5em;
+	padding: 1em 0 0;
 	text-align: center;
+}
 
-	@include media($medium-screen) {
-		text-align: left;
-	}
+.account__block {
+	margin-bottom: 3em;
 }
 
 .account-form {
