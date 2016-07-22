@@ -43,6 +43,22 @@
 	}
 }
 
+.open-share-example--counts {
+	@extend .open-share-example;
+	height: 2em;
+	line-height: 2.3em;
+	width: 2em;
+
+	.open-share-example__icon {
+		font-size: .8em;
+	}
+
+	.open-share-example__count {
+		@include transform(translate(-50%, 0));
+		opacity: 1;
+	}
+}
+
 .open-share-examples--mobile .open-share-example {
 	margin: .5em 1em;
 
@@ -50,7 +66,7 @@
 		margin: .5em;
 	}
 
-	.socicon-snapchat:before {
+	.socicon-snapchat::before {
 		font-weight: 900 !important;
 	}
 }
@@ -75,7 +91,7 @@
 	border-radius: 0;
 
 	.open-share-example__icon {
-		transform: rotate(-135deg) translateZ(0);
+		@include transform(rotate(-135deg) translateZ(0));
 	}
 }
 
@@ -122,6 +138,7 @@
 	padding: 10px;
 	position: absolute;
 	top: -50px;
+	width: 2.916666667em;
 
 	&::after {
 		@include transform(translateX(-50%));
@@ -139,8 +156,8 @@
 }
 
 .open-share-example:hover .open-share-example__count {
+	@include transform(translate(-50%, 0));
 	opacity: 1;
-	transform: translate(-50%, 0);
 }
 
 .open-share-example--diamond {
@@ -151,8 +168,8 @@
 
 	&:hover .open-share-example__count {
 		@include transform(translate(0, 0) rotate(225deg));
-		left: -63%;
-		top: 110%;
+		left: -53%;
+		top: 109%;
 	}
 }
 
