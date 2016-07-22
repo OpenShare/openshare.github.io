@@ -8,6 +8,12 @@
 	@extend %row-padd;
 }
 
+.header--background {
+	@extend .header;
+	background: url('../img/bg-masthead.jpg') no-repeat center center;
+	padding: 0 1.25em 1.25em;
+}
+
 .header__logo {
 	font-size: 2em;
 	font-weight: 200;

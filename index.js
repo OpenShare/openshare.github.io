@@ -17,6 +17,7 @@ const serve = st({
 
 // routing
 routes.add('GET /', render('index'));
+routes.add('GET /account', render('account'));
 routes.add('POST /login', (req, res, params) => {
   body(req, res, (err, form) => {
     if (err) {
