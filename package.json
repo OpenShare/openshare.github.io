@@ -21,15 +21,13 @@
   "scripts": {
     "start": "node index.js",
     "watch:js": "watchify browser/js/index.js -o browser/dist/bundle.js -dv",
-    "watch:css": "node-sass -w assets/scss/pages.scss browser/dist/bundle.css",
+    "watch:css": "node-sass -w browser/scss/pages.scss browser/dist/bundle.css",
     "watch": "npm run watch:js & npm run watch:css",
     "build:js": "browserify browser/js/index.js -g uglifyify | uglifyjs -cm > browser/dist/bundle.js",
-    "build:css": "node-sass assets/scss/pages.scss browser/dist/bundle.css",
+    "build:css": "node-sass browser/scss/pages.scss browser/dist/bundle.css",
     "dev": "npm run watch & npm start",
     "production": "npm run build & npm start",
     "lint": "eslint **/*.js",
-    "test": "browserify browser/js/test.js > browser/dist/test.bundle.js",
-    "dev:test": "watchify browser/js/test.js -o  browser/dist/test.bundle.js -dv",
     "baitAndSwitch": "standard-format -w **/*.js"
   },
   "keywords": [
