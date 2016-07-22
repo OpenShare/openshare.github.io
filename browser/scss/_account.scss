@@ -1,0 +1,66 @@
+.account {
+	padding-bottom: 4em;
+}
+
+.account__header {
+	@extend %row-padd;
+	background: #eee;
+	padding-bottom: 1em;
+	padding-top: 2em;
+}
+
+.account__inner {
+	@extend %row-padd;
+	@extend %outer-container;
+	padding-top: 2.5em;
+}
+
+.account__avatar {
+	border-radius: 100%;
+	display: block;
+	height: 9.375em;
+	margin: 0 auto;
+	width: 9.375em;
+}
+
+.account__bio {
+	line-height: 1.5;
+	margin: 0 auto;
+	max-width: 37.5em;
+	padding: 1.25em 0;
+	text-align: center;
+}
+
+.account__block {
+	margin-top: 1.875em;
+	text-align: center;
+
+	@include media($medium-screen) {
+		text-align: left;
+	}
+}
+
+.account-form {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.account-form__input {
+	margin-bottom: .625em;
+}
+
+.account-form__input {
+	padding: .625em;
+	width: 100%;
+}
+
+.account__btn {
+	display: block;
+	margin: 1.875em auto 0;
+
+	@include media($medium-screen) {
+		margin: 1.875em 0 0;
+	}
+}

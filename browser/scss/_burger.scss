@@ -125,15 +125,23 @@ $sass-burger-add-vendor-prefixes: true !default;
 
 .burger-icon {
 	@include burger(25px, 4px, 5px, #fff);
+	top: -1px;
+	right: -20px;
 
 	@include media(415px) {
 		position: absolute;
-		top: 39px;
+		top: 38px;
 		right: 30px;
 	};
 
 	@include media($large-screen) {
 		display: none;
+	}
+
+	.header-background & {
+		@include media(415px) {
+			top: 30px;
+		};
 	}
 }
 
