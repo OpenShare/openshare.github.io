@@ -48,7 +48,15 @@
 }
 
 .account-form__input {
+	@include transition(.3s);
+	border: solid 2px rgb(238, 238, 238);
 	margin-bottom: .625em;
+;
+
+	&:focus {
+		border: solid 2px $blue;
+		outline: none;
+	}
 }
 
 .account-form__input {
