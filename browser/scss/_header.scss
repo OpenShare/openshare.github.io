@@ -91,3 +91,8 @@
 	@extend .header__nav-link;
 	color: $blue;
 }
+
+.header__btn {
+	font-size: .8em;
+	padding: 1em 1.25em 0;
+}

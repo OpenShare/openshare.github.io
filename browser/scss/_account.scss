@@ -75,6 +75,11 @@
 
 .account-form__item--disabled {
 	opacity: .4;
+
+	&,
+	.account-form__input {
+		cursor: help;
+	}
 }
 
 .account-form__input {
