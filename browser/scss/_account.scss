@@ -22,6 +22,15 @@
 	}
 }
 
+.account__more-info {
+	font-size: .9em;
+}
+
+.account__more-info-icon {
+	margin-left: 1.25em;
+	margin-right: .2em;
+}
+
 .account__avatar {
 	border-radius: 100%;
 	display: block;
@@ -39,10 +48,10 @@
 }
 
 .account__username {
+	font-size: 1.5em;
+	font-weight: bold;
 	line-height: 1.5;
 	margin: 0 auto;
-	font-weight: bold;
-	font-size: 1.5em;
 	padding: 1em 0 0;
 	text-align: center;
 }
@@ -56,6 +65,10 @@
 	margin: 0;
 	padding: 0;
 	width: 100%;
+}
+
+.account-form__item--disabled {
+	opacity: .4;
 }
 
 .account-form__input {
