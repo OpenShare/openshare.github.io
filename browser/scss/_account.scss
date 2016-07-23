@@ -13,7 +13,7 @@
 	@extend %row-padd;
 	@extend %outer-container;
 	line-height: 1.5;
-	padding-top: 3.5em;
+	padding-top: 2em;
 }
 
 .account__instruction {
@@ -54,6 +54,12 @@
 	margin: 0 auto;
 	padding: 1em 0 0;
 	text-align: center;
+}
+
+.account__intro {
+	border-bottom: solid 1px #ddd;
+	padding-bottom: 1em;
+	margin-bottom: 3em;
 }
 
 .account__block {
