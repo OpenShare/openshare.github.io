@@ -13,7 +13,7 @@
 	@extend %row-padd;
 	@extend %outer-container;
 	line-height: 1.5;
-	padding-top: 2.5em;
+	padding-top: 3.5em;
 }
 
 .account__instruction {
@@ -48,7 +48,7 @@
 }
 
 .account__block {
-	margin-bottom: 3em;
+	margin-bottom: 5em;
 }
 
 .account-form {
@@ -76,10 +76,17 @@
 }
 
 .account__btn {
-	display: block;
-	margin: 1.875em auto 0;
+	display: inline-block;
+	margin: 0 auto;
+}
 
-	@include media($medium-screen) {
-		margin: 1.875em 0 0;
+.account__delete {
+	color: $red;
+	display: inline-block;
+	font-size: .9em;
+	margin-left: 1.5em;
+
+	&:hover {
+		text-decoration: underline;
 	}
 }
