@@ -38,23 +38,33 @@ routes.add('GET /user/{username}', (req, res) => {
   if (isSession) {
     const data = sessions[cookies.session].data
     
-    const tr = trumpet();
-    const page = fs.createReadStream('browser/account.html');
+    if (data.screen_name !== req.params.username) {
+      res.writeHead(302, {
+        'Location': `/user/${data.screen_name}`
+      });
 
-    const avatar = tr.select('.account__avatar');
-    avatar.setAttribute('src', data.profile_image_url_https
-      .replace('_normal', ''));
+      res.end();
+    } else {
+    
+      const tr = trumpet();
+      const page = fs.createReadStream('browser/account.html');
 
-    const username = tr.select('.account__username');
-    username.createWriteStream().end(data.screen_name);
+      const avatar = tr.select('.account__avatar');
+      avatar.setAttribute('src', data.profile_image_url_https
+        .replace('_normal', ''));
 
-    const bio = tr.select('.account__bio');
-    bio.createWriteStream().end(data.description);
+      const username = tr.select('.account__username');
+      username.createWriteStream().end(data.screen_name);
 
-    const header = tr.select('.account__header');
-    header.setAttribute('style', `background: url('${data.profile_banner_url}');`);
+      const bio = tr.select('.account__bio');
+      bio.createWriteStream().end(data.description);
 
-    page.pipe(tr).pipe(oppressor(req)).pipe(res);
+      const header = tr.select('.account__header');
+      header.setAttribute('style', `background: url('${data.profile_banner_url}');`);
+
+      page.pipe(tr).pipe(oppressor(req)).pipe(res);
+    
+    }
 
   } else {
     res.writeHead(302, {
@@ -69,6 +79,7 @@ routes.add('GET /twitter/auth', (req, res) => {
   twitter.getRequestToken((err, token, tokenSecret, results) => {
     if (err) {
       console.error(err);
+      error(res, err)
     } else {
       users[token] = {};
       users[token].secret = tokenSecret;
@@ -87,8 +98,16 @@ routes.add('GET /twitter/auth/success?{twitterParams}', (req, res) => {
   const token = params.oauth_token;
   const verifier = params.oauth_verifier;
 
-  twitter.getAccessToken(token, users[token].secret, verifier,
-    getAccessToken(req, res, token));
+  if (users[token]) {
+    twitter.getAccessToken(token, users[token].secret, verifier,
+      getAccessToken(req, res, token));
+  } else {
+    res.writeHead(302, {
+      'Location': '/'
+    });
+
+    res.end();
+  }
 });
 
 routes.add('POST /register', (req, res, params) => {
@@ -138,6 +157,7 @@ function getAccessToken (req, res, user) {
   return function (err, token, secret, results) {
     if (err) {
       console.error(err);
+      error(res, err);
     } else {
       users[user].access = token;
       users[user].accessSecret = secret;
@@ -151,6 +171,7 @@ function verifyCreds (req, res) {
   return function (err, data, response) {
     if (err) {
       console.error(err);
+      err(res, err)
     } else {
       const sid = crypto.randomBytes(64).toString('hex');
       sessions[sid] = {}
@@ -165,4 +186,9 @@ function verifyCreds (req, res) {
       res.end();
     }
   };
+}
+
+function error (res, err) {
+  res.statusCode = err.statusCode;
+  res.end(err.data + '\n')
 }
