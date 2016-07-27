@@ -30,13 +30,34 @@ const serve = st({
 });
 
 // routing
-routes.add('GET /', render('index'));
+routes.add('GET /', (req, res) => {
+  const cookies = cookie.parse(req.headers.cookie || '');
+  const isSession = cookies.session && has(sessions, cookies.session);
+  
+  if (isSession) {
+    const data = sessions[cookies.session].data;
+
+    const tr = trumpet();
+    const page = fs.createReadStream('browser/index.html');
+    
+    const btn = tr.select('.header__btn');
+    btn.setAttribute('href', `/user/${data.screen_name}`);
+    btn.createWriteStream()
+       .end(`Welcome, ${data.screen_name}`);
+
+    page.pipe(tr).pipe(oppressor(req)).pipe(res);
+  
+  } else {
+    render('index')(req, res)
+  }
+});
+
 routes.add('GET /user/{username}', (req, res) => {
   const cookies = cookie.parse(req.headers.cookie || '');
   const isSession = cookies.session && has(sessions, cookies.session);
   
   if (isSession) {
-    const data = sessions[cookies.session].data
+    const data = sessions[cookies.session].data;
     
     if (data.screen_name !== req.params.username) {
       res.writeHead(302, {
