@@ -9,9 +9,9 @@ const st = require('st'); // static file server
 const body = require('body/json'); // form body parser
 const oppressor = require('oppressor'); // gzip
 const Twitter = require('node-twitter-api');
-const url = require('url')
+const url = require('url');
 
-const users = {}
+const users = {};
 
 const twitter = Twitter({
   consumerKey: process.env.consumerKey,
@@ -32,28 +32,28 @@ routes.add('GET /account', render('account'));
 routes.add('GET /twitter/auth', (req, res) => {
   twitter.getRequestToken((err, token, tokenSecret, results) => {
     if (err) {
-      console.error(err)
+      console.error(err);
     } else {
-      users[token] = {}
+      users[token] = {};
       users[token].secret = tokenSecret;
 
       res.writeHead(302, {
         'Location': twitter.getAuthUrl(token)
       });
 
-      res.end(); 
+      res.end();
     }
   });
 });
 
 routes.add('GET /twitter/auth/success?{twitterParams}', (req, res) => {
   const params = url.parse(req.url, true).query;
-  const token = params['oauth_token']
-  const verifier = params['oauth_verifier']
-  
+  const token = params.oauth_token;
+  const verifier = params.oauth_verifier;
+
   twitter.getAccessToken(token, users[token].secret, verifier,
     getAccessToken(req, res, token));
-})
+});
 
 routes.add('POST /register', (req, res, params) => {
   body(req, res, (err, data) => {
@@ -62,8 +62,7 @@ routes.add('POST /register', (req, res, params) => {
       res.statusCode = 404;
       res.end(err + '\n');
     }
-    
-  })
+  });
 });
 
 // http server
@@ -104,18 +103,18 @@ function getAccessToken (req, res, user) {
     } else {
       users[user].access = token;
       users[user].accessSecret = secret;
-      
-      twitter.verifyCredentials(token, secret, verifyCreds(req, res))
+
+      twitter.verifyCredentials(token, secret, verifyCreds(req, res));
     }
-  }
+  };
 }
 
 function verifyCreds (req, res) {
   return function (err, data, response) {
    if (err) {
-     console.error(err)
+     console.error(err);
    } else {
-     res.end(data['screen_name']);  
+     res.end(data.screen_name);
    }
-  }
+  };
 }
