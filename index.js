@@ -63,7 +63,7 @@ routes.add('POST /register', (req, res, params) => {
       res.statusCode = 404;
       res.end(err + '\n');
     } else {
-	  console.log(data);
+      console.log(data);
     }
   });
 });
@@ -114,25 +114,25 @@ function getAccessToken (req, res, user) {
 
 function verifyCreds (req, res) {
   return function (err, data, response) {
-   if (err) {
-     console.error(err);
-   } else {
-     const tr = trumpet();
-	 const page = fs.createReadStream('browser/account.html');
+    if (err) {
+      console.error(err);
+    } else {
+      const tr = trumpet();
+      const page = fs.createReadStream('browser/account.html');
 
-	 const avatar = tr.select('.account__avatar');
-	 avatar.setAttribute('src', data.profile_image_url_https);
+      const avatar = tr.select('.account__avatar');
+      avatar.setAttribute('src', data.profile_image_url_https);
 
-	 const username = tr.select('.account__username');
-	 username.createWriteStream().end(data.screen_name);
+      const username = tr.select('.account__username');
+      username.createWriteStream().end(data.screen_name);
 
-	 const bio = tr.select('.account__bio');
-	 bio.createWriteStream().end(data.description);
+      const bio = tr.select('.account__bio');
+      bio.createWriteStream().end(data.description);
 
-	 const header = tr.select('.account__header');
-	 header.setAttribute('style', `background: url('${data.profile_banner_url}');`);
+      const header = tr.select('.account__header');
+      header.setAttribute('style', `background: url('${data.profile_banner_url}');`);
 
-	 page.pipe(tr).pipe(oppressor(req)).pipe(res);
-   }
+      page.pipe(tr).pipe(oppressor(req)).pipe(res);
+    }
   };
 }
