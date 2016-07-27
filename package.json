@@ -54,6 +54,8 @@
   },
   "dependencies": {
     "body": "^5.1.0",
+    "cookie": "^0.3.1",
+    "has": "^1.0.1",
     "node-twitter-api": "^1.7.4",
     "open-share": "^1.2.3",
     "oppressor": "0.0.1",

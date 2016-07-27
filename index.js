@@ -11,8 +11,11 @@ const oppressor = require('oppressor'); // gzip
 const Twitter = require('node-twitter-api');
 const url = require('url');
 const trumpet = require('trumpet');
+const has = require('has');
+const cookie = require('cookie');
 
 const users = {};
+const sessions = {};
 
 const twitter = Twitter({
   consumerKey: process.env.consumerKey,
@@ -28,7 +31,39 @@ const serve = st({
 
 // routing
 routes.add('GET /', render('index'));
-routes.add('GET /account', render('account'));
+routes.add('GET /user/{username}', (req, res) => {
+  const cookies = cookie.parse(req.headers.cookie || '');
+  const isSession = cookies.session && has(sessions, cookies.session);
+  
+  if (isSession) {
+    const data = sessions[cookies.session].data
+    
+    const tr = trumpet();
+    const page = fs.createReadStream('browser/account.html');
+
+    const avatar = tr.select('.account__avatar');
+    avatar.setAttribute('src', data.profile_image_url_https
+      .replace('_normal', ''));
+
+    const username = tr.select('.account__username');
+    username.createWriteStream().end(data.screen_name);
+
+    const bio = tr.select('.account__bio');
+    bio.createWriteStream().end(data.description);
+
+    const header = tr.select('.account__header');
+    header.setAttribute('style', `background: url('${data.profile_banner_url}');`);
+
+    page.pipe(tr).pipe(oppressor(req)).pipe(res);
+
+  } else {
+    res.writeHead(302, {
+      'Location': '/twitter/auth'
+    });
+
+    res.end();
+  }
+});
 
 routes.add('GET /twitter/auth', (req, res) => {
   twitter.getRequestToken((err, token, tokenSecret, results) => {
@@ -85,7 +120,7 @@ const server = http.createServer((req, res) => {
 
 // listen for http request on port 9090
 server.listen(9090, () => {
-  console.log('Server is running on http://localhost:9090');
+  console.log('Server is running on http://127.0.0.1:9090');
 });
 
 
@@ -117,22 +152,17 @@ function verifyCreds (req, res) {
     if (err) {
       console.error(err);
     } else {
-      const tr = trumpet();
-      const page = fs.createReadStream('browser/account.html');
+      const sid = crypto.randomBytes(64).toString('hex');
+      sessions[sid] = {}
+      sessions[sid].data = data
+      
+      res.setHeader('set-cookie', `session=${sid};Path=/;`);
+      
+      res.writeHead(302, {
+        'Location': `/user/${data.screen_name}`
+      });
 
-      const avatar = tr.select('.account__avatar');
-      avatar.setAttribute('src', data.profile_image_url_https);
-
-      const username = tr.select('.account__username');
-      username.createWriteStream().end(data.screen_name);
-
-      const bio = tr.select('.account__bio');
-      bio.createWriteStream().end(data.description);
-
-      const header = tr.select('.account__header');
-      header.setAttribute('style', `background: url('${data.profile_banner_url}');`);
-
-      page.pipe(tr).pipe(oppressor(req)).pipe(res);
+      res.end();
     }
   };
 }
