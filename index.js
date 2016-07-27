@@ -10,6 +10,7 @@ const body = require('body/json'); // form body parser
 const oppressor = require('oppressor'); // gzip
 const Twitter = require('node-twitter-api');
 const url = require('url');
+const trumpet = require('trumpet');
 
 const users = {};
 
@@ -61,6 +62,8 @@ routes.add('POST /register', (req, res, params) => {
       console.error(err);
       res.statusCode = 404;
       res.end(err + '\n');
+    } else {
+	  console.log(data);
     }
   });
 });
@@ -114,7 +117,19 @@ function verifyCreds (req, res) {
    if (err) {
      console.error(err);
    } else {
-     res.end(data.screen_name);
+     const tr = trumpet();
+	 const page = fs.createReadStream('browser/account.html');
+
+	 const avatar = tr.select('.account__avatar');
+	 avatar.setAttribute('src', data.profile_background_image_url_https);
+
+	 const username = tr.select('.account__username');
+	 username.createWriteStream().end(data.screen_name);
+
+	 const bio = tr.select('.account__bio');
+	 bio.createWriteStream().end(data.description);
+
+	 page.pipe(tr).pipe(oppressor(req)).pipe(res);
    }
   };
 }
