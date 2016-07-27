@@ -117,11 +117,12 @@ function verifyCreds (req, res) {
    if (err) {
      console.error(err);
    } else {
+	 console.log(data);
      const tr = trumpet();
 	 const page = fs.createReadStream('browser/account.html');
 
 	 const avatar = tr.select('.account__avatar');
-	 avatar.setAttribute('src', data.profile_background_image_url_https);
+	 avatar.setAttribute('src', data.profile_image_url_https);
 
 	 const username = tr.select('.account__username');
 	 username.createWriteStream().end(data.screen_name);
