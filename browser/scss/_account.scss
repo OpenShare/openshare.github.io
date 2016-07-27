@@ -4,9 +4,29 @@
 
 .account__header {
 	@extend %row-padd;
-	background: #eee;
+	background-color: #eee;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	color: $white;
 	padding-bottom: 1em;
 	padding-top: 2em;
+	position: relative;
+
+	&::before {
+		background: rgba(0, 0, 0, .6);
+		content: '';
+		height: 100%;
+		left: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
+	}
+}
+
+.account__header-inner {
+	position: relative;
+	z-index: 99;
 }
 
 .account__inner {
@@ -40,6 +60,7 @@
 }
 
 .account__bio {
+	font-size: 1.125em;
 	line-height: 1.5;
 	margin: 0 auto;
 	max-width: 37.5em;
@@ -58,8 +79,8 @@
 
 .account__intro {
 	border-bottom: solid 1px #ddd;
-	padding-bottom: 1em;
 	margin-bottom: 3em;
+	padding-bottom: 1em;
 }
 
 .account__block {

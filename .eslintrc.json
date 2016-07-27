@@ -1,8 +1,5 @@
 {
     "extends": "airbnb",
-    "plugins": [
-        "react"
-    ],
     "rules": {
       "new-cap": [
         2,

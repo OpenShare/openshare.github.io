@@ -33,20 +33,20 @@ const serve = st({
 routes.add('GET /', (req, res) => {
   const cookies = cookie.parse(req.headers.cookie || '');
   const isSession = cookies.session && has(sessions, cookies.session);
-  
+
   if (isSession) {
     const data = sessions[cookies.session].data;
 
     const tr = trumpet();
     const page = fs.createReadStream('browser/index.html');
-    
+
     const btn = tr.select('.header__btn');
     btn.setAttribute('href', `/user/${data.screen_name}`);
     btn.createWriteStream()
        .end(`Welcome, ${data.screen_name}`);
 
     page.pipe(tr).pipe(oppressor(req)).pipe(res);
-  
+
   } else {
     render('index')(req, res)
   }
@@ -55,10 +55,10 @@ routes.add('GET /', (req, res) => {
 routes.add('GET /user/{username}', (req, res) => {
   const cookies = cookie.parse(req.headers.cookie || '');
   const isSession = cookies.session && has(sessions, cookies.session);
-  
+
   if (isSession) {
     const data = sessions[cookies.session].data;
-    
+
     if (data.screen_name !== req.params.username) {
       res.writeHead(302, {
         'Location': `/user/${data.screen_name}`
@@ -66,7 +66,7 @@ routes.add('GET /user/{username}', (req, res) => {
 
       res.end();
     } else {
-    
+
       const tr = trumpet();
       const page = fs.createReadStream('browser/account.html');
 
@@ -81,10 +81,10 @@ routes.add('GET /user/{username}', (req, res) => {
       bio.createWriteStream().end(data.description);
 
       const header = tr.select('.account__header');
-      header.setAttribute('style', `background: url('${data.profile_banner_url}');`);
+      header.setAttribute('style', `background-image: url('${data.profile_banner_url}');`);
 
       page.pipe(tr).pipe(oppressor(req)).pipe(res);
-    
+
     }
 
   } else {
@@ -197,9 +197,9 @@ function verifyCreds (req, res) {
       const sid = crypto.randomBytes(64).toString('hex');
       sessions[sid] = {}
       sessions[sid].data = data
-      
+
       res.setHeader('set-cookie', `session=${sid};Path=/;`);
-      
+
       res.writeHead(302, {
         'Location': `/user/${data.screen_name}`
       });
