@@ -117,7 +117,6 @@ function verifyCreds (req, res) {
    if (err) {
      console.error(err);
    } else {
-	 console.log(data);
      const tr = trumpet();
 	 const page = fs.createReadStream('browser/account.html');
 
@@ -129,6 +128,9 @@ function verifyCreds (req, res) {
 
 	 const bio = tr.select('.account__bio');
 	 bio.createWriteStream().end(data.description);
+
+	 const header = tr.select('.account__header');
+	 header.setAttribute('style', `background: url('${data.profile_banner_url}');`);
 
 	 page.pipe(tr).pipe(oppressor(req)).pipe(res);
    }
