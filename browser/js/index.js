@@ -1,13 +1,43 @@
 require('open-share');
+const xhr = require('xhr');
 
-const openShareNodes = document.querySelectorAll('.open-share-examples [data-open-share]');
 const animationMods = ['square', 'diamond', 'rectangle', 'rectangle-vert'];
-const burger = document.querySelector('.burger-icon');
-const nav = document.querySelector('.header__nav');
 
-burger.addEventListener('click', () => {
-	burger.classList.toggle('active');
-	nav.classList.toggle('active');
+const ui = {
+	openShareNodes: document.querySelectorAll('.open-share-examples [data-open-share]'),
+	burger: document.querySelector('.burger-icon'),
+	nav: document.querySelector('.header__nav'),
+	appKey: document.getElementById('app-key'),
+	secretKey: document.getElementById('secret-key'),
+	urls: document.querySelectorAll('.url-list__input'),
+	submit: document.getElementById('account-submit')
+};
+
+ui.burger.addEventListener('click', () => {
+	ui.burger.classList.toggle('active');
+	ui.nav.classList.toggle('active');
+});
+
+ui.submit.addEventListener('click', () => {
+	const payload = {
+		appKey: ui.appKey.value,
+		secretKey: ui.secretKey.value,
+		urls: [].map.call(ui.urls, url => url.value)
+	};
+
+	xhr({
+	    body: JSON.stringify(payload),
+	    url: "/register",
+	    headers: {
+	        "Content-Type": "application/json"
+	    },
+		method: 'POST'
+	}, function (err, resp, body) {
+	    if (err) console.error(err);
+		if (body) {
+			console.log(body);
+		}
+	});
 });
 
 function Timer(callback, delay) {
@@ -60,7 +90,7 @@ function animationLoop() {
 		// wait a second in between each animation segment
 		const timer = new Timer(() => {
 			// loop through open share nodes
-			[].forEach.call(openShareNodes, (node, j) => {
+			[].forEach.call(ui.openShareNodes, (node, j) => {
 				// delay by index * 100ms
 				new Timer(function timerCallback() {
 					// out of mods so reset
@@ -77,7 +107,7 @@ function animationLoop() {
 			});
 		}, i * 1000);
 
-		[].forEach.call(openShareNodes, (node) => {
+		[].forEach.call(ui.openShareNodes, (node) => {
 			node.addEventListener('mouseenter', () => {
 				timer.pause();
 			});
@@ -92,7 +122,7 @@ function animationLoop() {
 document.addEventListener('DOMContentLoaded', () => {
 	const interval = new RecurringTimer(animationLoop, 6000);
 
-	[].forEach.call(openShareNodes, (node) => {
+	[].forEach.call(ui.openShareNodes, (node) => {
 		node.addEventListener('mouseenter', () => {
 			interval.pause();
 		});

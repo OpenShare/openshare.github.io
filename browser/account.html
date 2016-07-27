@@ -87,10 +87,10 @@
 				<p class="account__instruction"><strong>Step 2</strong>: Paste your Twitter auth keys here <a href="#" class="account__more-info"><span class="account__more-info-icon fa fa-info-circle"></span> what is this?</a></p>
 				<ul class="account-form">
 					<li class="account-form__item">
-						<input class="account-form__input" type="text" placeholder="Twitter application key" />
+						<input id="app-key" class="account-form__input" type="text" placeholder="Twitter application key" />
 					</li>
 					<li class="account-form__item">
-						<input class="account-form__input" type="text" placeholder="Twitter secret" />
+						<input id="secret-key"  class="account-form__input" type="text" placeholder="Twitter secret" />
 					</li>
 				</ul>
 			</div>
@@ -99,19 +99,19 @@
 				<p class="account__instruction"><strong>Step 3</strong>: Paste the URLs you want to count here <a href="#" class="account__more-info"><span class="account__more-info-icon fa fa-info-circle"></span> why only 5?</a></p>
 				<ul class="account-form">
 					<li class="account-form__item">
-						<input class="account-form__input" type="text" placeholder="https://" />
+						<input class="account-form__input url-list__input" type="text" placeholder="https://" />
 					</li>
 					<li class="account-form__item">
-						<input class="account-form__input" type="text" placeholder="https://" />
+						<input class="account-form__input url-list__input" type="text" placeholder="https://" />
 					</li>
 					<li class="account-form__item">
-						<input class="account-form__input" type="text" placeholder="https://" />
+						<input class="account-form__input url-list__input" type="text" placeholder="https://" />
 					</li>
 					<li class="account-form__item">
-						<input class="account-form__input" type="text" placeholder="https://" />
+						<input class="account-form__input url-list__input" type="text" placeholder="https://" />
 					</li>
 					<li class="account-form__item">
-						<input class="account-form__input" type="text" placeholder="https://" />
+						<input class="account-form__input url-list__input" type="text" placeholder="https://" />
 					</li>
 					<li class="account-form__item--disabled">
 						<input disabled class="account-form__input" type="text" placeholder="https://" />
@@ -123,7 +123,7 @@
 				<a href="#" class="account__more-info">Want more URLs? Let us know.</a>
 			</div>
 
-			<button class="account__btn btn">Submit</button>
+			<button id='account-submit' class="account__btn btn">Submit</button>
 			<a href="#" class="account__delete">Delete account</a>
 		</div>
 	</div>
