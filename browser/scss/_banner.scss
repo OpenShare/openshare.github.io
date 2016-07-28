@@ -32,8 +32,7 @@
 	text-transform: uppercase;
 }
 
-.banner__title-emphasis {
-	color: $orange;
+.banner__emphasis {
 	font-weight: 600;
 }
 
@@ -41,10 +40,7 @@
 	font-size: .8em;
 	font-style: italic;
 	line-height: 1.3;
-
-	&:last-child {
-		margin-bottom: 0;
-	}
+	margin-bottom: 2.5em;
 }
 
 .banner__break {
@@ -68,5 +64,13 @@
 	@include media($medium-screen) {
 		display: inline-block;
 		width: 40%;
+	}
+}
+
+.banner__btn {
+	font-size: .75em;
+
+	@include media($large-screen) {
+		font-size: 1em;
 	}
 }

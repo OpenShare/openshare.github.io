@@ -26,6 +26,15 @@
 	}
 }
 
+.btn--pink {
+	@extend .btn;
+	background: #bd5ac5;
+
+	&:hover {
+		background: lighten($pink, 2.5%);
+	}
+}
+
 .btn--small-pink {
 	@extend .btn;
 	background: $pink;
