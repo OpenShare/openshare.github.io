@@ -148,7 +148,16 @@ routes.add('POST /register', (req, res, params) => {
       res.statusCode = 404;
       res.end(err + '\n');
     } else {
-      console.log(data);
+      
+      const now = new Date().toISOString();
+      const id = crypto.randomBytes(6).toString('hex');
+      const key = now + id;
+      
+      const payload = Object.assign({}, data, {
+        osapi: key
+      })
+      
+      res.end(JSON.stringify(payload))
     }
   });
 });
