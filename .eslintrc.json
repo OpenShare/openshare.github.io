@@ -7,6 +7,7 @@
           "capIsNew": false
         }
       ],
+	  "no-param-reassign": 0,
 	  "no-new": 0,
 	  "no-console": 0,
 	  "global-require": 0,

@@ -30,56 +30,6 @@ const serve = st({
 	cache: false, // edit or delete this line for production
 });
 
-function render(page) {
-	return (req, res) => {
-		res.setHeader('content-type', 'text/html');
-
-		fs.createReadStream(`browser/${page}.html`)
-		.pipe(oppressor(req))
-		.pipe(res);
-	};
-}
-
-function error(res, err) {
-	res.statusCode = err.statusCode;
-	res.end(`${err.data} \n`);
-}
-
-function verifyCreds(req, res) {
-	return function verify(err, data) {
-		if (err) {
-			console.error(err);
-			err(res, err);
-		} else {
-			const sid = crypto.randomBytes(64).toString('hex');
-			sessions[sid] = {};
-			sessions[sid].data = data;
-
-			res.setHeader('set-cookie', `session=${sid};Path=/;`);
-
-			res.writeHead(302, {
-				Location: `/@${data.screen_name}`,
-			});
-
-			res.end();
-		}
-	};
-}
-
-function getAccessToken(req, res, user) {
-	return function accessToken(err, token, secret) {
-		if (err) {
-			console.error(err);
-			error(res, err);
-		} else {
-			users[user].access = token;
-			users[user].accessSecret = secret;
-
-			twitter.verifyCredentials(token, secret, verifyCreds(req, res));
-		}
-	};
-}
-
 // routing
 routes.add('GET /', (req, res) => {
 	const cookies = cookie.parse(req.headers.cookie || '');
@@ -256,3 +206,53 @@ const server = http.createServer((req, res) => {
 server.listen(9090, () => {
 	console.log('Server is running on http://127.0.0.1:9090');
 });
+
+function render(page) {
+	return (req, res) => {
+		res.setHeader('content-type', 'text/html');
+
+		fs.createReadStream(`browser/${page}.html`)
+		.pipe(oppressor(req))
+		.pipe(res);
+	};
+}
+
+function error(res, err) {
+	res.statusCode = err.statusCode;
+	res.end(`${err.data} \n`);
+}
+
+function verifyCreds(req, res) {
+	return function verify(err, data) {
+		if (err) {
+			console.error(err);
+			err(res, err);
+		} else {
+			const sid = crypto.randomBytes(64).toString('hex');
+			sessions[sid] = {};
+			sessions[sid].data = data;
+
+			res.setHeader('set-cookie', `session=${sid};Path=/;`);
+
+			res.writeHead(302, {
+				Location: `/@${data.screen_name}`,
+			});
+
+			res.end();
+		}
+	};
+}
+
+function getAccessToken(req, res, user) {
+	return function accessToken(err, token, secret) {
+		if (err) {
+			console.error(err);
+			error(res, err);
+		} else {
+			users[user].access = token;
+			users[user].accessSecret = secret;
+
+			twitter.verifyCredentials(token, secret, verifyCreds(req, res));
+		}
+	};
+}
