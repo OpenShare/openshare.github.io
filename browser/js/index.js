@@ -35,6 +35,9 @@ if (isInPage(ui.submit)) {
 			method: 'POST',
 		}, (err, resp, body) => {
 			if (err) console.error(err);
+
+			document.body.scrollTop = 0;
+
 			if (body) {
 				ui.accountInner.innerHTML = body;
 			}
