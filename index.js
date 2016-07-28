@@ -171,11 +171,13 @@ OpenShare.setApiKey('${apiKey}');`,
 					`<script data-api-key="${apiKey}" src="/path/to/openshare.js"></script>`,
 					'html'
 				),
+				key: apiKey,
 			};
 
 			const instructions = {
-				js: tr.select('.code-instructions--js'),
-				html: tr.select('.code-instructions--html'),
+				js: tr.select('.account__code--js'),
+				html: tr.select('.account__code--html'),
+				key: tr.select('.account__spi-key'),
 			};
 
 			Object.keys(highlighted).forEach((key) => {
