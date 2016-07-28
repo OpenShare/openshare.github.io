@@ -93,20 +93,6 @@ routes.add(/^GET \/@/, (req, res) => {
 			const header = tr.select('.account__header');
 			header.setAttribute('style', `background-image: url('${data.profile_banner_url}');`);
 
-			const highlighted = {
-				js: rainbow.colorSync('var foo = true;', 'javascript'),
-				html: rainbow.colorSync('<h1>Hi!</h1>', 'html'),
-			};
-
-			const instructions = {
-				js: tr.select('.code-instructions--js'),
-				html: tr.select('.code-instructions--html'),
-			};
-
-			for (const key of highlighted) {
-				instructions[key].createWriteStream().end(highlighted[key]);
-			}
-
 			page.pipe(tr).pipe(oppressor(req)).pipe(res);
 		}
 	} else {
@@ -166,17 +152,39 @@ routes.add('POST /register', (req, res) => {
 		} else {
 			const now = new Date().toISOString();
 			const id = crypto.randomBytes(6).toString('hex');
-			const key = now + id;
+			const apiKey = now + id;
 
 			Object.assign({}, data, {
-				osapi: key,
+				osapi: apiKey,
 			});
 
 			const html = fs.createReadStream('browser/components/keygen.html');
 			const tr = trumpet();
 
-			const keySelector = tr.select('.openshare-key');
-			keySelector.createWriteStream().end(key);
+			const highlighted = {
+				js: rainbow.colorSync(
+					`const OpenShare = require('openshare');
+OpenShare.setApiKey('${apiKey}');`,
+					'javascript'
+				),
+				html: rainbow.colorSync(
+					`<script data-api-key="${apiKey}" src="/path/to/openshare.js"></script>`,
+					'html'
+				),
+			};
+
+			const instructions = {
+				js: tr.select('.code-instructions--js'),
+				html: tr.select('.code-instructions--html'),
+			};
+
+			Object.keys(highlighted).forEach((key) => {
+				if (!instructions[key]) {
+					return;
+				}
+
+				instructions[key].createWriteStream().end(highlighted[key]);
+			});
 
 			let count = 0;
 			tr.selectAll('.url-list__input', listItem => {
