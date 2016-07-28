@@ -10,7 +10,8 @@ const ui = {
 	appKey: document.getElementById('app-key'),
 	secretKey: document.getElementById('secret-key'),
 	urls: document.querySelectorAll('.url-list__input'),
-	submit: document.getElementById('account-submit')
+	submit: document.getElementById('account-submit'),
+  accountInner: document.querySelector('.account__inner')
 };
 
 ui.burger.addEventListener('click', () => {
@@ -18,27 +19,29 @@ ui.burger.addEventListener('click', () => {
 	ui.nav.classList.toggle('active');
 });
 
-ui.submit.addEventListener('click', () => {
-	const payload = {
-		appKey: ui.appKey.value,
-		secretKey: ui.secretKey.value,
-		urls: [].map.call(ui.urls, url => url.value)
-	};
+if (isInPage(ui.submit)) {
+  ui.submit.addEventListener('click', () => {
+    const payload = {
+      appKey: ui.appKey.value,
+      secretKey: ui.secretKey.value,
+      urls: [].map.call(ui.urls, url => url.value)
+    };
 
-	xhr({
-	    body: JSON.stringify(payload),
-	    url: "/register",
-	    headers: {
-	        "Content-Type": "application/json"
-	    },
-		method: 'POST'
-	}, function (err, resp, body) {
-	    if (err) console.error(err);
-		if (body) {
-			console.log(body);
-		}
-	});
-});
+    xhr({
+        body: JSON.stringify(payload),
+        url: "/register",
+        headers: {
+            "Content-Type": "application/json"
+        },
+      method: 'POST'
+    }, (err, resp, body) => {
+        if (err) console.error(err);
+        if (body) {
+          ui.accountInner.innerHTML = body;
+        }
+    });
+  });
+}
 
 function Timer(callback, delay) {
 	let timerId,
@@ -135,3 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		animationLoop();
 	}, 1000);
 });
+
+function isInPage (node) {
+  return (node === document.body) ? false : document.body.contains(node);
+}
