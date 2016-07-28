@@ -6,6 +6,7 @@
 .header {
 	@extend %row;
 	@extend %row-padd;
+	position: relative;
 }
 
 .header-background {
@@ -57,6 +58,10 @@
 	&.active {
 		display: block;
 	}
+}
+
+.header__nav--logged-in {
+	padding-right: 3.75em;
 }
 
 .header__nav-list {

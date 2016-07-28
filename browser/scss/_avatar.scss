@@ -1,0 +1,13 @@
+.avatar {
+	display: block;
+	height: 3.125em;
+	position: absolute;
+	right: 0;
+	top: 5px;
+	width: 3.125em;
+}
+
+.avatar__img {
+	border-radius: 100%;
+	width: 100%;
+}
