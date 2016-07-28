@@ -50,10 +50,10 @@ routes.add('GET /', (req, res) => {
 	avatarItem.setAttribute('class', 'header__nav-item');
 
 	const avatar = tr.select('.avatar');
-	avatar.setAttribute('href', `/user/${data.screen_name}`);
+	avatar.setAttribute('href', `/@${data.screen_name}`);
 
 	const avatarImg = tr.select('.avatar__img');
-	avatarImg.setAttribute('href', `/user/${data.screen_name}`);
+	avatarImg.setAttribute('href', `/@${data.screen_name}`);
 	avatarImg.setAttribute('src', data.profile_image_url_https);
 
     page.pipe(tr).pipe(oppressor(req)).pipe(res);
@@ -63,16 +63,15 @@ routes.add('GET /', (req, res) => {
   }
 });
 
-routes.add('GET /user/{username}', (req, res) => {
+routes.add(/^GET \/@/, (req, res) => {
   const cookies = cookie.parse(req.headers.cookie || '');
   const isSession = cookies.session && has(sessions, cookies.session);
-
   if (isSession) {
     const data = sessions[cookies.session].data;
-
-    if (data.screen_name !== req.params.username) {
+ 
+    if (data.screen_name !== req.url.split('@')[1]) {
       res.writeHead(302, {
-        'Location': `/user/${data.screen_name}`
+        'Location': `/@${data.screen_name}`
       });
 
       res.end();
@@ -212,7 +211,7 @@ function verifyCreds (req, res) {
       res.setHeader('set-cookie', `session=${sid};Path=/;`);
 
       res.writeHead(302, {
-        'Location': `/user/${data.screen_name}`
+        'Location': `/@${data.screen_name}`
       });
 
       res.end();
