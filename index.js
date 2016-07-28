@@ -163,8 +163,8 @@ routes.add('POST /register', (req, res, params) => {
       const keySelector = tr.select('.openshare-key');
       keySelector.createWriteStream().end(key);
      
-      const count = 0;
-      tr.selectAll('url-list__input', listItem => {
+      let count = 0;
+      tr.selectAll('.url-list__input', listItem => {
         const url = data.urls[count++]
         
         listItem.setAttribute('value', url); 
