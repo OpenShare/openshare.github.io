@@ -1,6 +1,5 @@
-require('open-share');
+const OpenShare = require('open-share');
 const xhr = require('xhr');
-
 const animationMods = ['square', 'diamond', 'rectangle', 'rectangle-vert'];
 
 const ui = {
@@ -11,7 +10,7 @@ const ui = {
 	secretKey: document.getElementById('secret-key'),
 	urls: document.querySelectorAll('.url-list__input'),
 	submit: document.getElementById('account-submit'),
-  accountInner: document.querySelector('.account__inner')
+	accountInner: document.querySelector('.account__inner')
 };
 
 ui.burger.addEventListener('click', () => {
