@@ -12,7 +12,7 @@
 .header-background {
 	background: url('../img/bg-masthead.jpg') no-repeat center center;
 	background-size: cover;
-	padding: 1px 1.25em 1.25em;
+	padding: .75em 1.25em 1.75em;
 
 	.header {
 		@extend %outer-container;
@@ -61,6 +61,7 @@
 }
 
 .header__nav--logged-in {
+	@extend .header__nav;
 	padding-right: 3.75em;
 }
 
@@ -81,6 +82,10 @@
 		font-size: 1.25em;
 		margin: 0 0 0 2em;
 	}
+}
+
+.header__nav-item--hide {
+	display: none;
 }
 
 .header__nav-link {

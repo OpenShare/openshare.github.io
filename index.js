@@ -40,10 +40,21 @@ routes.add('GET /', (req, res) => {
     const tr = trumpet();
     const page = fs.createReadStream('browser/index.html');
 
-    const btn = tr.select('.header__btn');
-    btn.setAttribute('href', `/user/${data.screen_name}`);
-    btn.createWriteStream()
-       .end(`Welcome, ${data.screen_name}`);
+	const header = tr.select('.header__nav');
+	header.setAttribute('class', 'header__nav--logged-in');
+
+    const btn = tr.select('.header__nav-btn');
+    btn.setAttribute('class', 'header__nav-item--hide');
+
+	const avatarItem = tr.select('.header__nav-avatar');
+	avatarItem.setAttribute('class', 'header__nav-item');
+
+	const avatar = tr.select('.avatar');
+	avatar.setAttribute('href', `/user/${data.screen_name}`);
+
+	const avatarImg = tr.select('.avatar__img');
+	avatarImg.setAttribute('href', `/user/${data.screen_name}`);
+	avatarImg.setAttribute('src', data.profile_image_url_https);
 
     page.pipe(tr).pipe(oppressor(req)).pipe(res);
 
