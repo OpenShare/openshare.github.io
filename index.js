@@ -155,9 +155,22 @@ routes.add('POST /register', (req, res, params) => {
       
       const payload = Object.assign({}, data, {
         osapi: key
-      })
+      });
+
+      const html = fs.createReadStream('browser/components/keygen.html');
+      const tr = trumpet();
       
-      res.end(JSON.stringify(payload))
+      const keySelector = tr.select('.openshare-key');
+      keySelector.createWriteStream().end(key);
+     
+      const count = 0;
+      tr.selectAll('url-list__input', listItem => {
+        const url = data.urls[count++]
+        
+        listItem.setAttribute('value', url); 
+      });
+      
+      html.pipe(tr).pipe(oppressor(req)).pipe(res);
     }
   });
 });
