@@ -164,11 +164,11 @@ routes.add('POST /register', (req, res) => {
 			const highlighted = {
 				js: rainbow.colorSync(
 					`const OpenShare = require('openshare');
-OpenShare.setApiKey('${apiKey}');`,
+OpenShare.setKey('${apiKey}');`,
 					'javascript'
 				),
 				html: rainbow.colorSync(
-					`<script data-api-key="${apiKey}" src="/path/to/openshare.js"></script>`,
+					`<script data-key="${apiKey}" src="/path/to/openshare.js"></script>`,
 					'html'
 				),
 				key: apiKey,
