@@ -84,7 +84,7 @@ routes.add(/^GET \/@/, (req, res) => {
 
 			setKeyGenPage(trKeygen, data, data.osapi);
 
-			const accountInner = trHtml.select('.account__inner').createWriteStream();
+			const accountInner = trHtml.select('[data-account-setup]').createWriteStream();
 			trKeygen.pipe(accountInner);
 
 			keygen.pipe(trKeygen);
