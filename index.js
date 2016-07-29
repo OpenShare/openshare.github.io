@@ -76,9 +76,7 @@ routes.add(/^GET \/@/, (req, res) => {
 			});
 
 			res.end();
-		}
-
-		if (data.osapi) {
+		} else if (data.osapi) {
 			const html = fs.createReadStream('browser/account.html');
 			const keygen = fs.createReadStream('browser/components/keygen.html');
 			const trHtml = trumpet();
@@ -90,16 +88,14 @@ routes.add(/^GET \/@/, (req, res) => {
 			trKeygen.pipe(accountInner);
 
 			keygen.pipe(trKeygen);
-
-			html.pipe(trHtml).pipe(oppressor(req)).pipe(res);
-
+			console.log('wow');
 			setupPersonalPage(trHtml, data);
+			html.pipe(trHtml).pipe(oppressor(req)).pipe(res);
 		} else {
 			const tr = trumpet();
 			const page = fs.createReadStream('browser/account.html');
 
 			setupPersonalPage(tr, data);
-
 			page.pipe(tr).pipe(oppressor(req)).pipe(res);
 		}
 	} else {
