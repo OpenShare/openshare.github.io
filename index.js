@@ -88,7 +88,7 @@ routes.add(/^GET \/@/, (req, res) => {
 			trKeygen.pipe(accountInner);
 
 			keygen.pipe(trKeygen);
-			console.log('wow');
+
 			setupPersonalPage(trHtml, data);
 			html.pipe(trHtml).pipe(oppressor(req)).pipe(res);
 		} else {
