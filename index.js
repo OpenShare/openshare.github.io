@@ -15,9 +15,34 @@ const has = require('has');
 const cookie = require('cookie');
 const rainbow = require('rainbow-code');
 const level = require('level');
-
 const db = level('db', {
 	valueEncoding: 'json',
+});
+
+const redis = require('redis');
+
+const redisOpts = {
+	host: '127.0.0.1',
+	port: 6379,
+};
+
+const db2Opts = Object.assign({}, redisOpts, {
+	db: 2,
+});
+
+const db3Opts = Object.assign({}, redisOpts, {
+	db: 3,
+});
+
+const db2 = redis.createClient(db2Opts);
+const db3 = redis.createClient(db3Opts);
+
+db2.on('error', err => {
+	console.error(err);
+});
+
+db3.on('error', err => {
+	console.error(err);
 });
 
 const users = {};
@@ -193,6 +218,20 @@ routes.add('POST /register', (req, res) => {
 				const tr = trumpet();
 
 				setKeyGenPage(tr, data, apiKey);
+
+				data.urls.forEach(url => {
+					db2.set(url, apiKey, redis.print);
+					db2.get(url, function (err, reply) {
+						if (err) console.log(err);
+						console.log(reply.toString()); // Will print `OK`
+					});
+				});
+
+				db3.set(apiKey	, `${data.appKey} | ${data.secretKey}`, redis.print);
+				db3.get(apiKey, function (err, reply) {
+					if (err) console.log(err);
+					console.log(reply.toString()); // Will print `OK`
+				});
 
 				html.pipe(tr).pipe(oppressor(req)).pipe(res);
 			}
