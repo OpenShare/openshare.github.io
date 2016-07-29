@@ -77,24 +77,26 @@
 		</header>
 
 		<div class="account__inner">
-			<div class="account__intro">
-				<h2>So you want Tweet counts huh?</h2>
-				<p class="account__instruction">In order to count the number of times a URL has been mentioned on Twitter we need to use Twitter's Search API. Access to the API is restricted so to make sure you have consistantly up-to-date counts we need you to create a new Twitter application and provide us with the access tokens. This will allow OpenShare to query the Twitter API on your behalf and count those URLs.</p>
-			</div>
-			<div class="account__block">
-				<p class="account__instruction"><strong>Step 1</strong>: Create a new Twitter application, give it a name and description (e.g 'OpenShare Counter') and your company website. Don't have a website? Just use openshare.social instead.</p>
-				<a class="account__btn btn" href="https://apps.twitter.com/app/new" target="_blank">Create Twitter Application <span class="fa fa-external-link"></span></a>
-			</div>
-			<div class="account__block">
-				<p class="account__instruction"><strong>Step 2</strong>: Click the "Keys and Access Tokens" tab and paste your consumer keys here <a href="/img/img-twitter-app-example.jpg" target="_blank" class="account__more-info"><span class="account__more-info-icon fa fa-info-circle"></span> what is this?</a></p>
-				<ul class="account-form">
-					<li class="account-form__item">
-						<input id="app-key" class="account-form__input" type="text" placeholder="Consumer key" />
-					</li>
-					<li class="account-form__item">
-						<input id="secret-key"  class="account-form__input" type="text" placeholder="Consumer secret" />
-					</li>
-				</ul>
+			<div data-account-setup>
+				<div class="account__intro">
+					<h2>So you want Tweet counts huh?</h2>
+					<p class="account__instruction">In order to count the number of times a URL has been mentioned on Twitter we need to use Twitter's Search API. Access to the API is restricted so to make sure you have consistantly up-to-date counts we need you to create a new Twitter application and provide us with the access tokens. This will allow OpenShare to query the Twitter API on your behalf and count those URLs.</p>
+				</div>
+				<div class="account__block">
+					<p class="account__instruction"><strong>Step 1</strong>: Create a new Twitter application, give it a name and description (e.g 'OpenShare Counter') and your company website. Don't have a website? Just use openshare.social instead.</p>
+					<a class="account__btn btn" href="https://apps.twitter.com/app/new" target="_blank">Create Twitter Application <span class="fa fa-external-link"></span></a>
+				</div>
+				<div class="account__block">
+					<p class="account__instruction"><strong>Step 2</strong>: Click the "Keys and Access Tokens" tab and paste your consumer keys here <a href="/img/img-twitter-app-example.jpg" target="_blank" class="account__more-info"><span class="account__more-info-icon fa fa-info-circle"></span> what is this?</a></p>
+					<ul class="account-form">
+						<li class="account-form__item">
+							<input id="app-key" class="account-form__input" type="text" placeholder="Consumer key" />
+						</li>
+						<li class="account-form__item">
+							<input id="secret-key"  class="account-form__input" type="text" placeholder="Consumer secret" />
+						</li>
+					</ul>
+				</div>
 			</div>
 
 			<div class="account__block">
