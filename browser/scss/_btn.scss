@@ -17,6 +17,10 @@
 	}
 }
 
+.btn__icon {
+	margin-right: .3125em;
+}
+
 .btn--dark {
 	@extend .btn;
 	background: $black;
