@@ -73,3 +73,9 @@
 	overflow: hidden;
 	padding-top: 2em;
 }
+
+.star-count {
+	@include transform(translateY(-3px) translateX(15px));
+	display: inline-block;
+	font-size: 11px;
+}
