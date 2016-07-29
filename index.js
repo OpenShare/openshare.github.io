@@ -14,6 +14,11 @@ const trumpet = require('trumpet');
 const has = require('has');
 const cookie = require('cookie');
 const rainbow = require('rainbow-code');
+const level = require('level');
+
+const db = level('db', {
+	valueEncoding: 'json',
+});
 
 const users = {};
 const sessions = {};
@@ -166,15 +171,27 @@ routes.add('POST /register', (req, res) => {
 				osapi: apiKey,
 			});
 
-			const userData = Object.assign({}, payload, sessions[cookies.session].data);
-			sessions[cookies.session].data = userData;
+			if (data.screen_name) {
+				res.end('don\'t do that');
+			} else {
+				const userData = Object.assign({}, payload, sessions[cookies.session].data);
+				sessions[cookies.session].data = userData;
 
-			const html = fs.createReadStream('browser/components/keygen.html');
-			const tr = trumpet();
+				db.put(userData.screen_name, userData, err => {
+					if (err) {
+						console.error(err);
+						res.end('404');
+					}
+				});
 
-			setKeyGenPage(tr, data, apiKey);
 
-			html.pipe(tr).pipe(oppressor(req)).pipe(res);
+				const html = fs.createReadStream('browser/components/keygen.html');
+				const tr = trumpet();
+
+				setKeyGenPage(tr, data, apiKey);
+
+				html.pipe(tr).pipe(oppressor(req)).pipe(res);
+			}
 		}
 	});
 });
@@ -222,13 +239,38 @@ function verifyCreds(req, res) {
 			sessions[sid] = {};
 			sessions[sid].data = data;
 
-			res.setHeader('set-cookie', `session=${sid};Path=/;`);
+			db.get(data.screen_name, (err, value) => {
+				if (err) {
+					if (err.notFound) {
+						db.put(data.screen_name, data, err => {
+							if (err) {
+								console.error(err);
+								res.end('404', err);
+							} else {
+								res.setHeader('set-cookie', `session=${sid};Path=/;`);
 
-			res.writeHead(302, {
-				Location: `/@${data.screen_name}`,
+								res.writeHead(302, {
+									Location: `/@${data.screen_name}`,
+								});
+
+								res.end();
+							}
+						});
+					} else {
+						console.error(err);
+						res.end('404', err);
+					}
+				} else {
+					sessions[sid].data = value;
+					res.setHeader('set-cookie', `session=${sid};Path=/;`);
+
+					res.writeHead(302, {
+						Location: `/@${data.screen_name}`,
+					});
+
+					res.end();
+				}
 			});
-
-			res.end();
 		}
 	};
 }
