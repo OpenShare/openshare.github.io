@@ -76,22 +76,29 @@ routes.add(/^GET \/@/, (req, res) => {
 			});
 
 			res.end();
+		}
+
+		if (data.osapi) {
+			const html = fs.createReadStream('browser/account.html');
+			const keygen = fs.createReadStream('browser/components/keygen.html');
+			const trHtml = trumpet();
+			const trKeygen = trumpet();
+
+			setKeyGenPage(trKeygen, data, data.osapi);
+
+			const accountInner = trHtml.select('.account__inner').createWriteStream();
+			trKeygen.pipe(accountInner);
+
+			keygen.pipe(trKeygen);
+
+			html.pipe(trHtml).pipe(oppressor(req)).pipe(res);
+
+			setupPersonalPage(trHtml, data);
 		} else {
 			const tr = trumpet();
 			const page = fs.createReadStream('browser/account.html');
 
-			const avatar = tr.select('.account__avatar');
-			avatar.setAttribute('src', data.profile_image_url_https
-			.replace('_normal', ''));
-
-			const username = tr.select('.account__username');
-			username.createWriteStream().end(data.screen_name);
-
-			const bio = tr.select('.account__bio');
-			bio.createWriteStream().end(data.description);
-
-			const header = tr.select('.account__header');
-			header.setAttribute('style', `background-image: url('${data.profile_banner_url}');`);
+			setupPersonalPage(tr, data);
 
 			page.pipe(tr).pipe(oppressor(req)).pipe(res);
 		}
@@ -144,55 +151,32 @@ routes.add('GET /twitter/auth/success?{twitterParams}', (req, res) => {
 });
 
 routes.add('POST /register', (req, res) => {
+	const cookies = cookie.parse(req.headers.cookie || '');
+
 	body(req, res, (err, data) => {
 		if (err) {
 			console.error(err);
 			res.statusCode = 404;
 			res.end(`${err} \n`);
 		} else {
-			const now = new Date().toISOString();
-			const id = crypto.randomBytes(6).toString('hex');
+			const now = new Date().getTime()
+				.toString()
+				.slice(5);
+
+			const id = crypto.randomBytes(5).toString('hex');
 			const apiKey = now + id;
 
-			Object.assign({}, data, {
+			const payload = Object.assign({}, data, {
 				osapi: apiKey,
 			});
+
+			const userData = Object.assign({}, payload, sessions[cookies.session].data);
+			sessions[cookies.session].data = userData;
 
 			const html = fs.createReadStream('browser/components/keygen.html');
 			const tr = trumpet();
 
-			const highlighted = {
-				js: rainbow.colorSync(
-					`const OpenShare = require('openshare');
-OpenShare.setKey('${apiKey}');`,
-					'javascript'
-				),
-				html: rainbow.colorSync(
-					`<script data-key="${apiKey}" src="/path/to/openshare.js"></script>`,
-					'html'
-				),
-				key: apiKey,
-			};
-
-			const instructions = {
-				js: tr.select('.account__code--js'),
-				html: tr.select('.account__code--html'),
-				key: tr.select('.account__spi-key'),
-			};
-
-			Object.keys(highlighted).forEach((key) => {
-				if (!instructions[key]) {
-					return;
-				}
-
-				instructions[key].createWriteStream().end(highlighted[key]);
-			});
-
-			let count = 0;
-			tr.selectAll('.url-list__input', listItem => {
-				const itemUrl = data.urls[count++];
-				listItem.setAttribute('value', itemUrl);
-			});
+			setKeyGenPage(tr, data, apiKey);
 
 			html.pipe(tr).pipe(oppressor(req)).pipe(res);
 		}
@@ -265,4 +249,54 @@ function getAccessToken(req, res, user) {
 			twitter.verifyCredentials(token, secret, verifyCreds(req, res));
 		}
 	};
+}
+
+function setupPersonalPage(tr, data) {
+	const avatar = tr.select('.account__avatar');
+	avatar.setAttribute('src', data.profile_image_url_https
+	.replace('_normal', ''));
+
+	const username = tr.select('.account__username');
+	username.createWriteStream().end(data.screen_name);
+
+	const bio = tr.select('.account__bio');
+	bio.createWriteStream().end(data.description);
+
+	const header = tr.select('.account__header');
+	header.setAttribute('style', `background-image: url('${data.profile_banner_url}');`);
+}
+
+function setKeyGenPage(tr, data, apiKey) {
+	const highlighted = {
+		js: rainbow.colorSync(
+			`const OpenShare = require('openshare');
+OpenShare.setKey('${apiKey}');`,
+			'javascript'
+		),
+		html: rainbow.colorSync(
+			`<script data-key="${apiKey}" src="/path/to/openshare.js"></script>`,
+			'html'
+		),
+		key: apiKey,
+	};
+
+	const instructions = {
+		js: tr.select('.account__code--js'),
+		html: tr.select('.account__code--html'),
+		key: tr.select('.account__spi-key'),
+	};
+
+	Object.keys(highlighted).forEach((key) => {
+		if (!instructions[key]) {
+			return;
+		}
+
+		instructions[key].createWriteStream().end(highlighted[key]);
+	});
+
+	let count = 0;
+	tr.selectAll('.url-list__input', listItem => {
+		const itemUrl = data.urls[count++];
+		listItem.setAttribute('value', itemUrl);
+	});
 }
