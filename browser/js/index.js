@@ -11,7 +11,7 @@ const ui = {
 	urls: document.querySelectorAll('.url-list__input'),
 	submit: document.getElementById('account-submit'),
 	accountInner: document.querySelector('.account__inner'),
-	moreUrlsLink: document.querySelector('.account__more-info'),
+	moreUrlsLink: document.querySelector('.account__more-info--form-link'),
 	moreUrls: document.querySelector('.more-urls'),
 };
 
@@ -58,6 +58,15 @@ document.addEventListener('DOMContentLoaded', () => {
 			});
 		});
 	}
+
+	ui.moreUrlsLink.addEventListener('click', e => {
+		e.preventDefault();
+		ui.moreUrls.classList.add('more-urls--display');
+
+		setTimeout(() => {
+			ui.moreUrls.classList.add('more-urls--show');
+		}, 200);
+	});
 
 	setTimeout(() => {
 		animationLoop();
