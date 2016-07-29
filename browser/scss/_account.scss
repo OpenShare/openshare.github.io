@@ -107,7 +107,8 @@
 	@include transition(.3s);
 	border: solid 2px rgb(238, 238, 238);
 	margin-bottom: .625em;
-;
+	padding: .625em;
+	width: 100%;
 
 	&:focus {
 		border: solid 2px $blue;
@@ -115,9 +116,9 @@
 	}
 }
 
-.account-form__input {
-	padding: .625em;
-	width: 100%;
+.account-form__input--no-margin {
+	@extend .account-form__input;
+	margin-bottom: 0;
 }
 
 .account__btn {
@@ -139,4 +140,10 @@
 .account__spi-key {
 	color: #d14;
 	font-size: .8125em;
+}
+
+.more-urls {
+	@include display(flex);
+	margin-top: 1.25em;
+	max-width: 25em;
 }
