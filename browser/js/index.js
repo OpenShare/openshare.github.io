@@ -11,39 +11,58 @@ const ui = {
 	urls: document.querySelectorAll('.url-list__input'),
 	submit: document.getElementById('account-submit'),
 	accountInner: document.querySelector('.account__inner'),
+	moreUrlsLink: document.querySelector('.account__more-info'),
+	moreUrls: document.querySelector('.more-urls'),
 };
 
-ui.burger.addEventListener('click', () => {
-	ui.burger.classList.toggle('active');
-	ui.nav.classList.toggle('active');
-});
+document.addEventListener('DOMContentLoaded', () => {
+	const interval = new RecurringTimer(animationLoop, 6000);
 
-if (isInPage(ui.submit)) {
-	ui.submit.addEventListener('click', () => {
-		const payload = {
-			appKey: ui.appKey.value,
-			secretKey: ui.secretKey.value,
-			urls: [].map.call(ui.urls, url => url.value),
-		};
-
-		xhr({
-			body: JSON.stringify(payload),
-			url: '/register',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			method: 'POST',
-		}, (err, resp, body) => {
-			if (err) console.error(err);
-
-			document.body.scrollTop = 0;
-
-			if (body) {
-				ui.accountInner.innerHTML = body;
-			}
+	[].forEach.call(ui.openShareNodes, (node) => {
+		node.addEventListener('mouseenter', () => {
+			interval.pause();
+		});
+		node.addEventListener('mouseleave', () => {
+			interval.resume();
 		});
 	});
-}
+
+	ui.burger.addEventListener('click', () => {
+		ui.burger.classList.toggle('active');
+		ui.nav.classList.toggle('active');
+	});
+
+	if (isInPage(ui.submit)) {
+		ui.submit.addEventListener('click', () => {
+			const payload = {
+				appKey: ui.appKey.value,
+				secretKey: ui.secretKey.value,
+				urls: [].map.call(ui.urls, url => url.value),
+			};
+
+			xhr({
+				body: JSON.stringify(payload),
+				url: '/register',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				method: 'POST',
+			}, (err, resp, body) => {
+				if (err) console.error(err);
+
+				document.body.scrollTop = 0;
+
+				if (body) {
+					ui.accountInner.innerHTML = body;
+				}
+			});
+		});
+	}
+
+	setTimeout(() => {
+		animationLoop();
+	}, 1000);
+});
 
 function Timer(callback, delay) {
 	let timerId,
@@ -123,23 +142,6 @@ function animationLoop() {
 		});
 	});
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-	const interval = new RecurringTimer(animationLoop, 6000);
-
-	[].forEach.call(ui.openShareNodes, (node) => {
-		node.addEventListener('mouseenter', () => {
-			interval.pause();
-		});
-		node.addEventListener('mouseleave', () => {
-			interval.resume();
-		});
-	});
-
-	setTimeout(() => {
-		animationLoop();
-	}, 1000);
-});
 
 function isInPage(node) {
 	return (node === document.body) ? false : document.body.contains(node);

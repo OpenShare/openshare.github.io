@@ -144,6 +144,13 @@
 
 .more-urls {
 	@include display(flex);
+	@include transition(.3s);
+	display: none;
 	margin-top: 1.25em;
 	max-width: 25em;
+	opacity: 0;
+}
+
+.more-urls--active {
+	opacity: 1;
 }
