@@ -42,6 +42,19 @@
 	}
 }
 
+.account__token-example {
+	@include transition(.3s);
+	display: none;
+}
+
+.account__token-example--display {
+	display: block;
+}
+
+.account__token-example--show {
+	opacity: 1;
+}
+
 .account__more-info {
 	font-size: .9em;
 }

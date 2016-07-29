@@ -13,6 +13,8 @@ const ui = {
 	accountSetup: document.querySelector('[data-account-setup]'),
 	moreUrlsLink: document.querySelector('[data-more-urls-link]'),
 	moreUrls: document.querySelector('[data-more-urls-form]'),
+	tokenExampleLink: document.querySelector('[data-token-example-link]'),
+	tokenExample: document.querySelector('[data-token-example]'),
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -65,6 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 		setTimeout(() => {
 			ui.moreUrls.classList.add('more-urls--show');
+		}, 200);
+	});
+
+	ui.tokenExampleLink.addEventListener('click', e => {
+		e.preventDefault();
+		ui.tokenExample.classList.add('account__token-example--display');
+
+		setTimeout(() => {
+			ui.tokenExample.classList.add('account__token-example--show');
 		}, 200);
 	});
 
