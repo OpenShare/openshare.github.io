@@ -5,6 +5,7 @@
 
 .newsletter__inner {
 	@extend %outer-container;
+	@extend %row-padd;
 	color: $white;
 	text-align: center;
 }
@@ -24,8 +25,13 @@
 
 .newsletter__form {
 	@include display(flex);
+	@include flex-direction(column);
 	margin: 0 auto;
 	max-width: 50em;
+
+	@include media($medium-screen) {
+		@include flex-direction(row);
+	}
 }
 
 .newsletter__input {
