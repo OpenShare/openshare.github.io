@@ -68,6 +68,10 @@ routes.add('GET /', (req, res) => {
 	}
 });
 
+routes.add('GET /examples', (req, res) => {
+	render('examples')(req, res);
+});
+
 routes.add(/^GET \/@/, (req, res) => {
 	const cookies = cookie.parse(req.headers.cookie || '');
 	const isSession = cookies.session && has(sessions, cookies.session);

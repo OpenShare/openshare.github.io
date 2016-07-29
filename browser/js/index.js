@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	const interval = new RecurringTimer(animationLoop, 6000);
 
 	[].forEach.call(ui.openShareNodes, (node) => {
+		if (!isInPage(node)) {
+			return;
+		}
+
 		node.addEventListener('mouseenter', () => {
 			interval.pause();
 		});
@@ -29,10 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
-	ui.burger.addEventListener('click', () => {
-		ui.burger.classList.toggle('active');
-		ui.nav.classList.toggle('active');
-	});
+	if (isInPage(ui.burger)) {
+		ui.burger.addEventListener('click', () => {
+			ui.burger.classList.toggle('active');
+			ui.nav.classList.toggle('active');
+		});
+	}
 
 	if (isInPage(ui.submit)) {
 		ui.submit.addEventListener('click', () => {
@@ -62,6 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	ui.moreUrlsLinks.forEach(moreUrlsLink => {
+		if (!isInPage(moreUrlsLink)) {
+			return;
+		}
+
 		moreUrlsLink.addEventListener('click', e => {
 			e.preventDefault();
 			ui.moreUrls.classList.add('more-urls--display');
@@ -72,14 +82,16 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
-	ui.tokenExampleLink.addEventListener('click', e => {
-		e.preventDefault();
-		ui.tokenExample.classList.add('account__token-example--display');
+	if (isInPage(ui.tokenExampleLink)) {
+		ui.tokenExampleLink.addEventListener('click', e => {
+			e.preventDefault();
+			ui.tokenExample.classList.add('account__token-example--display');
 
-		setTimeout(() => {
-			ui.tokenExample.classList.add('account__token-example--show');
-		}, 200);
-	});
+			setTimeout(() => {
+				ui.tokenExample.classList.add('account__token-example--show');
+			}, 200);
+		});
+	}
 
 	setTimeout(() => {
 		animationLoop();

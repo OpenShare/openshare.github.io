@@ -9,7 +9,7 @@
 
 .masthead--small {
 	@extend .masthead;
-	min-height: 900px;
+	min-height: 730px;
 
 	@include media($large-screen) {
 		min-height: 530px;
