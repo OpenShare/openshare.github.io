@@ -11,7 +11,7 @@ const ui = {
 	urls: document.querySelectorAll('.url-list__input'),
 	submit: document.getElementById('account-submit'),
 	accountSetup: document.querySelector('[data-account-setup]'),
-	moreUrlsLink: document.querySelector('[data-more-urls-link]'),
+	moreUrlsLinks: document.querySelectorAll('[data-more-urls-link]'),
 	moreUrls: document.querySelector('[data-more-urls-form]'),
 	tokenExampleLink: document.querySelector('[data-token-example-link]'),
 	tokenExample: document.querySelector('[data-token-example]'),
@@ -61,13 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	ui.moreUrlsLink.addEventListener('click', e => {
-		e.preventDefault();
-		ui.moreUrls.classList.add('more-urls--display');
+	ui.moreUrlsLinks.forEach(moreUrlsLink => {
+		moreUrlsLink.addEventListener('click', e => {
+			e.preventDefault();
+			ui.moreUrls.classList.add('more-urls--display');
 
-		setTimeout(() => {
-			ui.moreUrls.classList.add('more-urls--show');
-		}, 200);
+			setTimeout(() => {
+				ui.moreUrls.classList.add('more-urls--show');
+			}, 200);
+		});
 	});
 
 	ui.tokenExampleLink.addEventListener('click', e => {
