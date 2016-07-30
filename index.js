@@ -117,6 +117,10 @@ routes.add(/^GET \/@/, (req, res) => {
 			setKeyGenPage(trKeygen, data, data.osapi);
 
 			const accountInner = trHtml.select('[data-account-setup]').createWriteStream();
+			const urlInstruction = trHtml.select('[data-url-instruction]');
+
+			urlInstruction.createWriteStream().end('Paste the URLs you want to count here');
+
 			trKeygen.pipe(accountInner);
 
 			keygen.pipe(trKeygen);

@@ -17,6 +17,7 @@ const ui = {
 	tokenExampleLink: document.querySelector('[data-token-example-link]'),
 	tokenExample: document.querySelector('[data-token-example]'),
 	success: document.querySelector('[data-success]'),
+	urlInstruction: document.querySelector('[data-url-instruction]'),
 };
 
 ui.requiredFields = [
@@ -110,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 				if (body) {
 					ui.accountSetup.innerHTML = body;
+					ui.urlInstruction.innerHTML = 'Paste the URLs you want to count here';
 				}
 			});
 		});
