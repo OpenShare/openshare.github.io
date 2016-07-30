@@ -18,6 +18,7 @@ const ui = {
 	tokenExample: document.querySelector('[data-token-example]'),
 	success: document.querySelector('[data-success]'),
 	urlInstruction: document.querySelector('[data-url-instruction]'),
+	deleteAccount: document.querySelector('[data-delete-account]'),
 };
 
 ui.requiredFields = [
@@ -142,6 +143,17 @@ document.addEventListener('DOMContentLoaded', () => {
 			}, 200);
 		});
 	}
+
+	ui.deleteAccount.addEventListener('click', e => {
+		e.preventDefault();
+
+		if (confirm('Are you sure you want to delete your account and stop counting Twitter shares?')) {
+			// send XHR request to delete account
+			// remove user, api keys and URLS
+			// redirect to home page
+			window.location = '/';
+		}
+	});
 
 	setTimeout(() => {
 		animationLoop();
