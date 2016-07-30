@@ -264,6 +264,50 @@ routes.add('POST /register', (req, res) => {
 	});
 });
 
+routes.add('POST /delete', (req, res) => {
+	const cookies = cookie.parse(req.headers.cookie || '');
+	const isSession = cookies.session && has(sessions, cookies.session);
+
+	if (isSession) {
+		const userData = sessions[cookies.session].data;
+
+		db.get(userData.screen_name, (err, data) => {
+			if (err) {
+				console.log(err);
+				res.writeHead(302, {
+					Location: '/',
+				});
+
+				res.end();
+			} else {
+				if (data.urls) {
+					data.urls.forEach(url => db2.del(url));
+				}
+				if (data.appKey && data.secretKey) {
+					db3.del(`${data.appKey} | ${data.secretKey}`);
+				}
+				db.del(data.screen_name, err => {
+					if (err) console.error(err);
+					else {
+						delete sessions[cookies.session];
+						res.writeHead(302, {
+							Location: '/',
+						});
+
+						res.end();
+					}
+				});
+			}
+		});
+	} else {
+		res.writeHead(302, {
+			Location: '/',
+		});
+
+		res.end();
+	}
+});
+
 // http server
 // if the request method and url is a defined route then call it's function
 // else serve a static file from the dist folder, or 404

@@ -204,10 +204,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		e.preventDefault();
 
 		if (confirm('Are you sure you want to delete your account and stop counting Twitter shares?')) {
-			// send XHR request to delete account
-			// remove user, api keys and URLS
-			// redirect to home page
-			window.location = '/';
+			xhr({
+				body: 'delete',
+				url: '/delete',
+				method: 'POST',
+			}, err => {
+				if (err) console.error(err);
+				window.location = '/';
+			});
 		}
 	});
 
