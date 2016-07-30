@@ -145,8 +145,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			}
 
 			const payload = {
-				appKey: ui.appKey.value,
-				secretKey: ui.secretKey.value,
+				appKey: isInPage(ui.appKey) ? ui.appKey.value : null,
+				secretKey: isInPage(ui.secretKey) ? ui.secretKey.value : null,
 				urls: [].map.call(ui.urls, url => url.value),
 			};
 

@@ -233,11 +233,13 @@ routes.add('POST /register', (req, res) => {
 					});
 				});
 
-				db3.set(apiKey, `${data.appKey} | ${data.secretKey}`, redis.print);
-				db3.get(apiKey, (err, reply) => {
-					if (err) console.log(err);
-					console.log(reply.toString()); // Will print `OK`
-				});
+				if (data.appKey && data.secretKey) {
+					db3.set(apiKey, `${data.appKey} | ${data.secretKey}`, redis.print);
+					db3.get(apiKey, (err, reply) => {
+						if (err) console.log(err);
+						console.log(reply.toString()); // Will print `OK`
+					});
+				}
 
 				html.pipe(tr).pipe(concat(html => {
 					db.get(userData.screen_name, (err, value) => {
