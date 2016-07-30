@@ -108,10 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
 				// TODO: if first submission slide to top to show API keys
 				// subsequent submissions just show success message
 				// pass true to showSuccess if first time user
-				showSuccess();
+				const res = JSON.parse(body);
+				console.log(res);
 
-				if (body) {
-					ui.accountSetup.innerHTML = body;
+				if (res) {
+					showSuccess(res.firstTimeUser);
+					ui.accountSetup.innerHTML = res.body;
 					ui.urlInstruction.innerHTML = 'Paste the URLs you want to count here';
 				}
 			});

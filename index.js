@@ -240,10 +240,8 @@ routes.add('POST /register', (req, res) => {
 					db.get(userData.screen_name, (err, value) => {
 						const jsonRes = {
 							body: html.toString(),
-							firstTimeUser: value.firstTimeUser,
+							firstTimeUser: value.firstTimeUser || false,
 						};
-
-						console.log(jsonRes);
 
 						const newData = Object.assign({}, value, {
 							firstTimeUser: false,
