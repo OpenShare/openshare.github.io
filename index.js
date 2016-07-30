@@ -15,6 +15,7 @@ const has = require('has');
 const cookie = require('cookie');
 const rainbow = require('rainbow-code');
 const level = require('level');
+const concat = require('concat-stream');
 const db = level('db', {
 	valueEncoding: 'json',
 });
@@ -235,7 +236,26 @@ routes.add('POST /register', (req, res) => {
 					console.log(reply.toString()); // Will print `OK`
 				});
 
-				html.pipe(tr).pipe(oppressor(req)).pipe(res);
+				html.pipe(tr).pipe(concat(html => {
+					db.get(userData.screen_name, (err, value) => {
+						const jsonRes = {
+							body: html.toString(),
+							firstTimeUser: value.firstTimeUser,
+						};
+
+						console.log(jsonRes);
+
+						const newData = Object.assign({}, value, {
+							firstTimeUser: false,
+						});
+
+						db.put(userData.screen_name, newData, err => {
+							if (err) console.error(err);
+						});
+
+						res.end(JSON.stringify(jsonRes));
+					});
+				}));
 			}
 		}
 	});
@@ -287,7 +307,11 @@ function verifyCreds(req, res) {
 			db.get(data.screen_name, (err, value) => {
 				if (err) {
 					if (err.notFound) {
-						db.put(data.screen_name, data, err => {
+						const newData = Object.assign({}, data, {
+							firstTimeUser: true,
+						});
+
+						db.put(data.screen_name, newData, err => {
 							if (err) {
 								console.error(err);
 								res.end('404', err);
