@@ -93,9 +93,7 @@ routes.add('GET /', (req, res) => {
 	}
 });
 
-routes.add('GET /examples', (req, res) => {
-	render('examples')(req, res);
-});
+routes.add('GET /examples', render('examples'));
 
 routes.add(/^GET \/@/, (req, res) => {
 	const cookies = cookie.parse(req.headers.cookie || '');
@@ -221,14 +219,14 @@ routes.add('POST /register', (req, res) => {
 
 				data.urls.forEach(url => {
 					db2.set(url, apiKey, redis.print);
-					db2.get(url, function (err, reply) {
+					db2.get(url, (err, reply) => {
 						if (err) console.log(err);
 						console.log(reply.toString()); // Will print `OK`
 					});
 				});
 
-				db3.set(apiKey	, `${data.appKey} | ${data.secretKey}`, redis.print);
-				db3.get(apiKey, function (err, reply) {
+				db3.set(apiKey, `${data.appKey} | ${data.secretKey}`, redis.print);
+				db3.get(apiKey, (err, reply) => {
 					if (err) console.log(err);
 					console.log(reply.toString()); // Will print `OK`
 				});
