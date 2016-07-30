@@ -209,13 +209,16 @@ routes.add('POST /register', (req, res) => {
 				const userData = Object.assign({}, payload, sessions[cookies.session].data);
 				sessions[cookies.session].data = userData;
 
-				db.put(userData.screen_name, userData, err => {
-					if (err) {
-						console.error(err);
-						res.end('404');
-					}
-				});
+				db.get(userData.screen_name, (err, value) => {
+					const newData = Object.assign({}, value, userData);
 
+					db.put(userData.screen_name, newData, err => {
+						if (err) {
+							console.error(err);
+							res.end('404');
+						}
+					});
+				});
 
 				const html = fs.createReadStream('browser/components/keygen.html');
 				const tr = trumpet();
@@ -240,7 +243,7 @@ routes.add('POST /register', (req, res) => {
 					db.get(userData.screen_name, (err, value) => {
 						const jsonRes = {
 							body: html.toString(),
-							firstTimeUser: value.firstTimeUser || false,
+							firstTimeUser: value.firstTimeUser,
 						};
 
 						const newData = Object.assign({}, value, {

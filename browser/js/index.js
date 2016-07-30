@@ -109,7 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
 				// subsequent submissions just show success message
 				// pass true to showSuccess if first time user
 				const res = JSON.parse(body);
-				console.log(res);
 
 				if (res) {
 					showSuccess(res.firstTimeUser);
