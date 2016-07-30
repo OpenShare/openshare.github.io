@@ -17,7 +17,14 @@ const ui = {
 	tokenExample: document.querySelector('[data-token-example]'),
 };
 
-ui.requiredFields = [ui.appKey, ui.secretKey, ui.urls[0]];
+ui.requiredFields = [
+	{ input: ui.appKey },
+	{ input: ui.secretKey },
+	{
+		input: ui.urls[0],
+		validate: value => value.includes('http'),
+	},
+];
 
 document.addEventListener('DOMContentLoaded', () => {
 	const interval = new RecurringTimer(animationLoop, 6000);
@@ -43,29 +50,29 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	if (isInPage(ui.submit)) {
-		ui.requiredFields.forEach(input => {
-			input.addEventListener('blur', e => {
-				if (!e.currentTarget.value) {
-					e.currentTarget.classList.add('account-form__input--error');
+		ui.requiredFields.forEach(field => {
+			field.input.addEventListener('blur', function validate(i) {
+				if ((i.validate && i.validate(i.input.value)) || i.input.value) {
+					i.input.classList.remove('account-form__input--error');
 				} else {
-					e.currentTarget.classList.remove('account-form__input--error');
+					i.input.classList.add('account-form__input--error');
 				}
-			});
+			}.bind(this, field));
 		});
 
 		ui.submit.addEventListener('click', () => {
 			let validationFailed = false,
 				firstFail = null;
 
-			ui.requiredFields.forEach(input => {
-				if (!input.value) {
+			ui.requiredFields.forEach(i => {
+				if ((i.validate && !i.validate(i.input.value)) || !i.input.value) {
 					validationFailed = true;
 
 					if (!firstFail) {
-						firstFail = input;
+						firstFail = i.input;
 					}
 
-					input.classList.add('account-form__input--error');
+					i.input.classList.add('account-form__input--error');
 				}
 			});
 
