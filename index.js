@@ -192,6 +192,9 @@ routes.add('POST /register', (req, res) => {
 			res.statusCode = 404;
 			res.end(`${err} \n`);
 		} else {
+			const hasKeys = data.appKey && data.secretKey;
+			const hasUrls = data.urls.length > 0 && data.urls.length <= 5;
+
 			const now = new Date().getTime()
 				.toString()
 				.slice(5);
@@ -203,8 +206,8 @@ routes.add('POST /register', (req, res) => {
 				osapi: apiKey,
 			});
 
-			if (data.screen_name) {
-				res.end('don\'t do that');
+			if (data.screen_name || !hasKeys || !hasUrls) {
+				res.end('Data must only be consumer keys and URLs.');
 			} else {
 				const userData = Object.assign({}, payload, sessions[cookies.session].data);
 				sessions[cookies.session].data = userData;
