@@ -129,6 +129,11 @@
 	}
 }
 
+.account-form__input--error {
+	background: rgba(100, 0, 0, .1);
+	border-color: #a00;
+}
+
 .account-form__input--no-margin {
 	@extend .account-form__input;
 	margin-bottom: 0;

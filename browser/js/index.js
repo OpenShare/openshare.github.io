@@ -17,6 +17,8 @@ const ui = {
 	tokenExample: document.querySelector('[data-token-example]'),
 };
 
+ui.requiredFields = [ui.appKey, ui.secretKey, ui.urls[0]];
+
 document.addEventListener('DOMContentLoaded', () => {
 	const interval = new RecurringTimer(animationLoop, 6000);
 
@@ -41,7 +43,39 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	if (isInPage(ui.submit)) {
+		ui.requiredFields.forEach(input => {
+			input.addEventListener('blur', e => {
+				if (!e.currentTarget.value) {
+					e.currentTarget.classList.add('account-form__input--error');
+				} else {
+					e.currentTarget.classList.remove('account-form__input--error');
+				}
+			});
+		});
+
 		ui.submit.addEventListener('click', () => {
+			let validationFailed = false,
+				firstFail = null;
+
+			ui.requiredFields.forEach(input => {
+				if (!input.value) {
+					validationFailed = true;
+
+					if (!firstFail) {
+						firstFail = input;
+					}
+
+					input.classList.add('account-form__input--error');
+				}
+			});
+
+			if (validationFailed) {
+				document.body.scrollTop = (firstFail.offsetTop -
+											firstFail.scrollTop +
+											firstFail.clientTop) - 10;
+				return false;
+			}
+
 			const payload = {
 				appKey: ui.appKey.value,
 				secretKey: ui.secretKey.value,
