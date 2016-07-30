@@ -179,3 +179,18 @@
 .more-urls--show {
 	opacity: 1;
 }
+
+.account__success {
+	@include transition(.3s);
+	line-height: 0;
+	margin: 0 0 .9375em;
+	opacity: 0;
+}
+
+.account__success--active {
+	opacity: 1;
+}
+
+.account__success-icon {
+	color: $pink;
+}

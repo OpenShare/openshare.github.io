@@ -10,11 +10,13 @@ const ui = {
 	secretKey: document.getElementById('secret-key'),
 	urls: document.querySelectorAll('.url-list__input'),
 	submit: document.getElementById('account-submit'),
+	account: document.querySelector('[data-account]'),
 	accountSetup: document.querySelector('[data-account-setup]'),
 	moreUrlsLinks: document.querySelectorAll('[data-more-urls-link]'),
 	moreUrls: document.querySelector('[data-more-urls-form]'),
 	tokenExampleLink: document.querySelector('[data-token-example-link]'),
 	tokenExample: document.querySelector('[data-token-example]'),
+	success: document.querySelector('[data-success]'),
 };
 
 ui.requiredFields = [
@@ -51,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	if (isInPage(ui.submit)) {
 		ui.requiredFields.forEach(field => {
+			if (!field.input) return;
 			field.input.addEventListener('blur', function validate(i) {
 				if ((i.validate && i.validate(i.input.value)) || i.input.value) {
 					i.input.classList.remove('account-form__input--error');
@@ -65,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				firstFail = null;
 
 			ui.requiredFields.forEach(i => {
+				if (!i.input) return;
 				if ((i.validate && !i.validate(i.input.value)) || !i.input.value) {
 					validationFailed = true;
 
@@ -99,7 +103,10 @@ document.addEventListener('DOMContentLoaded', () => {
 			}, (err, resp, body) => {
 				if (err) console.error(err);
 
-				document.body.scrollTop = 0;
+				// TODO: if first submission slide to top to show API keys
+				// subsequent submissions just show success message
+				// pass true to showSuccess if first time user
+				showSuccess();
 
 				if (body) {
 					ui.accountSetup.innerHTML = body;
@@ -138,6 +145,22 @@ document.addEventListener('DOMContentLoaded', () => {
 		animationLoop();
 	}, 1000);
 });
+
+function showSuccess(firstTime) {
+	if (firstTime) {
+		document.body.scrollTop = ui.account.offsetTop -
+									ui.account.scrollTop +
+									ui.account.clientTop;
+	}
+
+	setTimeout(() => {
+		ui.success.classList.add('account__success--active');
+	}, 200);
+
+	setTimeout(() => {
+		ui.success.classList.remove('account__success--active');
+	}, 2000);
+}
 
 function Timer(callback, delay) {
 	let timerId,
