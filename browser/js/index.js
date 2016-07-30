@@ -21,14 +21,53 @@ const ui = {
 	deleteAccount: document.querySelector('[data-delete-account]'),
 };
 
-ui.requiredFields = [
-	{ input: ui.appKey },
-	{ input: ui.secretKey },
-	{
-		input: ui.urls[0],
-		validate: value => value.includes('http'),
+const validateFields = {
+	// validate field based on value being set
+	// unless custom validate function specified
+	validate: (field) => {
+		// custom validation function is set and passed
+		// or custom validation function is not set but value is
+		if ((field.validate && field.validate(field.input.value)) ||
+			(!field.validate && field.input.value)) {
+			return true;
+
+		// custom validation function is set and failed
+		// or custom validation function not set and value not set either
+		} else if ((field.validate && !field.validate(field.input.value)) ||
+					(!field.validate && !field.input.value)) {
+			return false;
+		}
 	},
-];
+	fields: [
+		// twitter consumer keys required
+		{ input: ui.appKey },
+		{ input: ui.secretKey },
+
+		// at least one URL required
+		{
+			input: ui.urls[0],
+			validate: value => value && value.includes('http'),
+		},
+
+		// optional URLs, if value must contain http
+		{
+			input: ui.urls[1],
+			validate: validateOptionalUrl,
+		},
+		{
+			input: ui.urls[2],
+			validate: validateOptionalUrl,
+		},
+		{
+			input: ui.urls[3],
+			validate: validateOptionalUrl,
+		},
+		{
+			input: ui.urls[4],
+			validate: validateOptionalUrl,
+		},
+	],
+};
 
 document.addEventListener('DOMContentLoaded', () => {
 	const interval = new RecurringTimer(animationLoop, 6000);
@@ -54,10 +93,12 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	if (isInPage(ui.submit)) {
-		ui.requiredFields.forEach(field => {
+		// validate fields on blur
+		validateFields.fields.forEach(field => {
 			if (!field.input) return;
 			field.input.addEventListener('blur', function validate(i) {
-				if ((i.validate && i.validate(i.input.value)) || i.input.value) {
+				const valid = validateFields.validate(i);
+				if (valid) {
 					i.input.classList.remove('account-form__input--error');
 				} else {
 					i.input.classList.add('account-form__input--error');
@@ -69,16 +110,19 @@ document.addEventListener('DOMContentLoaded', () => {
 			let validationFailed = false,
 				firstFail = null;
 
-			ui.requiredFields.forEach(i => {
-				if (!i.input) return;
-				if ((i.validate && !i.validate(i.input.value)) || !i.input.value) {
+			validateFields.fields.forEach(field => {
+				if (!field.input) return;
+
+				const valid = validateFields.validate(field);
+
+				if (!valid) {
 					validationFailed = true;
 
 					if (!firstFail) {
-						firstFail = i.input;
+						firstFail = field.input;
 					}
 
-					i.input.classList.add('account-form__input--error');
+					field.input.classList.add('account-form__input--error');
 				}
 			});
 
@@ -160,6 +204,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		animationLoop();
 	}, 1000);
 });
+
+function validateOptionalUrl(value) {
+	if (value) {
+		return value.includes('http');
+	}
+
+	return true;
+}
 
 function showSuccess(firstTime) {
 	if (firstTime) {
