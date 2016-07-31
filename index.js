@@ -139,6 +139,13 @@ routes.add(/^GET \/@/, (req, res) => {
 			// });
 
 			setupPersonalPage(trHtml, data);
+
+			let count = 0;
+			trHtml.selectAll('.url-list__input', listItem => {
+				const itemUrl = data.urls[count++];
+				listItem.setAttribute('value', itemUrl);
+			});
+
 			html.pipe(trHtml).pipe(oppressor(req)).pipe(res);
 		} else {
 			const tr = trumpet();
