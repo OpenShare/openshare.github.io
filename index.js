@@ -16,6 +16,7 @@ const cookie = require('cookie');
 const rainbow = require('rainbow-code');
 const level = require('level');
 const concat = require('concat-stream');
+const fetch = require('node-fetch');
 const db = level('db', {
 	valueEncoding: 'json',
 });
@@ -123,8 +124,19 @@ routes.add(/^GET \/@/, (req, res) => {
 			urlInstruction.createWriteStream().end('Paste the URLs you want to count here');
 
 			trKeygen.pipe(accountInner);
-
 			keygen.pipe(trKeygen);
+
+			// count each URL and add number to DOM
+			// trHtml.selectAll('[data-url]', url => {
+			// 	console.log('Counting ', url.value);
+			// 	fetch(`https://api.openshare.social/job?url=${url.value}&key=${data.osapi}`)
+			// 	.then(res => {
+			// 		res.json();
+			// 	})
+			// 	.then(json => {
+			// 		console.log(json);
+			// 	});
+			// });
 
 			setupPersonalPage(trHtml, data);
 			html.pipe(trHtml).pipe(oppressor(req)).pipe(res);
@@ -234,6 +246,14 @@ routes.add('POST /register', (req, res) => {
 						if (err) console.log(err);
 						console.log(reply.toString()); // Will print `OK`
 					});
+					// console.log('Counting', url);
+					// fetch(`https://api.openshare.social/job?url=${url}&key=${data.osapi}`)
+					// .then(res => {
+					// 	res.json();
+					// })
+					// .then(json => {
+					// 	console.log(json);
+					// });
 				});
 
 				if (data.appKey && data.secretKey) {
