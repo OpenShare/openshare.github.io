@@ -129,11 +129,12 @@ routes.add(/^GET \/@/, (req, res) => {
 			// count each URL and add number to DOM
 			// trHtml.selectAll('[data-url]', url => {
 			// 	console.log('Counting ', url.value);
-			// 	fetch(`https://api.openshare.social/job?url=${url.value}&key=${data.osapi}`)
+			// 	fetch('https://api.openshare.social/job?url=https://www.digitalsurgeons.com/thoughts/technology/the-blockchain-revolution/')
 			// 	.then(res => {
 			// 		res.json();
 			// 	})
 			// 	.then(json => {
+			// 		console.log('result');
 			// 		console.log(json);
 			// 	});
 			// });
@@ -257,11 +258,12 @@ routes.add('POST /register', (req, res) => {
 						console.log(reply.toString()); // Will print `OK`
 					});
 					// console.log('Counting', url);
-					// fetch(`https://api.openshare.social/job?url=${url}&key=${data.osapi}`)
+					// fetch('https://api.openshare.social/job?url=https://www.digitalsurgeons.com/thoughts/technology/the-blockchain-revolution/')
 					// .then(res => {
 					// 	res.json();
 					// })
 					// .then(json => {
+					// 	console.log('here');
 					// 	console.log(json);
 					// });
 				});
