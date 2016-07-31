@@ -204,6 +204,9 @@ routes.add('POST /register', (req, res) => {
 			res.statusCode = 404;
 			res.end(`${err} \n`);
 		} else {
+			if (!data.appKey) data.appKey = sessions[cookies.session].data.appKey;
+			if (!data.secretKey) data.secretKey = sessions[cookies.session].data.secretKey;
+
 			const hasKeys = data.appKey && data.secretKey;
 			const hasUrls = data.urls.length > 0 && data.urls.length <= 5;
 
