@@ -231,7 +231,7 @@ routes.add('POST /register', (req, res) => {
 			if (data.screen_name || !hasKeys || !hasUrls) {
 				res.end('Data must only be consumer keys and URLs.');
 			} else {
-				const userData = Object.assign({}, payload, sessions[cookies.session].data);
+				const userData = Object.assign({}, sessions[cookies.session].data, payload);
 				sessions[cookies.session].data = userData;
 
 				db.get(userData.screen_name, (err, value) => {
