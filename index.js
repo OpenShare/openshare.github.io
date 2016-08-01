@@ -245,6 +245,8 @@ routes.add('POST /register', (req, res) => {
 
 				setKeyGenPage(tr, data, apiKey);
 
+				const spans = [];
+
 				data.urls.forEach((url, i) => {
 					db2.set(url, apiKey, redis.print);
 					db2.get(url, (err, reply) => {
@@ -257,9 +259,7 @@ routes.add('POST /register', (req, res) => {
 
 					console.log('Counting', url, i);
 
-					tr.select(`[data-url-status="${i}"]`)
-					.createWriteStream()
-					.end(`
+					spans.push(`
 						<a class="account-form__status-link" href="https://api.openshare.social/job?url=${url}&key=${apiKey}">
 							<span class="account-form__status-icon fa fa-external-link"></span>
 							view count
@@ -280,6 +280,7 @@ routes.add('POST /register', (req, res) => {
 						const jsonRes = {
 							body: html.toString(),
 							firstTimeUser: value.firstTimeUser,
+							spans,
 						};
 
 						const newData = Object.assign({}, value, {

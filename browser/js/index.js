@@ -19,6 +19,7 @@ const ui = {
 	success: document.querySelector('[data-success]'),
 	urlInstruction: document.querySelector('[data-url-instruction]'),
 	deleteAccount: document.querySelector('[data-delete-account]'),
+	status: document.querySelectorAll('[data-url-status]'),
 };
 
 const validateFuncs = {
@@ -169,6 +170,13 @@ document.addEventListener('DOMContentLoaded', () => {
 					showSuccess(res.firstTimeUser);
 					ui.accountSetup.innerHTML = res.body;
 					ui.urlInstruction.innerHTML = 'Paste the URLs you want to count here';
+
+					if (res.spans) {
+						[].forEach.call(ui.status, (stat, i) => {
+							if (res.spans[i]) stat.innerHTML = res.spans[i];
+							else stat.innerHTML = '';
+						});
+					}
 				}
 			});
 		});
