@@ -8,7 +8,7 @@ const ui = {
 	nav: document.querySelector('.header__nav'),
 	appKey: document.getElementById('app-key'),
 	secretKey: document.getElementById('secret-key'),
-	urls: document.querySelectorAll('.url-list__input'),
+	urls: document.querySelectorAll('[data-url]'),
 	submit: document.getElementById('account-submit'),
 	account: document.querySelector('[data-account]'),
 	accountSetup: document.querySelector('[data-account-setup]'),

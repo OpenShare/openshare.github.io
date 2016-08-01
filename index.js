@@ -142,7 +142,7 @@ routes.add(/^GET \/@/, (req, res) => {
 			setupPersonalPage(trHtml, data);
 
 			let count = 0;
-			trHtml.selectAll('.url-list__input', listItem => {
+			trHtml.selectAll('[data-url]', listItem => {
 				const itemUrl = data.urls[count++];
 				listItem.setAttribute('value', itemUrl);
 			});
@@ -484,7 +484,7 @@ OpenShare.setKey('${apiKey}');`,
 	});
 
 	let count = 0;
-	tr.selectAll('.url-list__input', listItem => {
+	tr.selectAll('[data-url]', listItem => {
 		const itemUrl = data.urls[count++];
 		listItem.setAttribute('value', itemUrl);
 	});
