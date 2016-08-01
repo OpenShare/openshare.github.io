@@ -107,6 +107,10 @@
 	width: 100%;
 }
 
+.account-form__item {
+	position: relative;
+}
+
 .account-form__item--disabled {
 	opacity: .4;
 
@@ -116,11 +120,25 @@
 	}
 }
 
+.account-form__status {
+	color: #666;
+	font-style: italic;
+	margin: 0;
+	position: absolute;
+	right: 1em;
+	top: .75em;
+}
+
+.account-form__status-icon {
+	color: #999;
+	margin-right: .4375em;
+}
+
 .account-form__input {
 	@include transition(.3s);
 	border: solid 2px rgb(238, 238, 238);
 	margin-bottom: .625em;
-	padding: .625em;
+	padding: .625em 10.625em .625em .625em;
 	width: 100%;
 
 	&:focus {
