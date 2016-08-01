@@ -126,25 +126,30 @@ routes.add(/^GET \/@/, (req, res) => {
 			trKeygen.pipe(accountInner);
 			keygen.pipe(trKeygen);
 
-			// count each URL and add number to DOM
-			// trHtml.selectAll('[data-url]', url => {
-			// 	console.log('Counting ', url.value);
-			// 	fetch('https://api.openshare.social/job?url=https://www.digitalsurgeons.com/thoughts/technology/the-blockchain-revolution/')
-			// 	.then(res => {
-			// 		res.json();
-			// 	})
-			// 	.then(json => {
-			// 		console.log('result');
-			// 		console.log(json);
-			// 	});
-			// });
-
 			setupPersonalPage(trHtml, data);
 
-			let count = 0;
-			trHtml.selectAll('[data-url]', listItem => {
-				const itemUrl = data.urls[count++];
-				listItem.setAttribute('value', itemUrl);
+			// loop through each URL, add to input value and count to label
+			data.urls.forEach((url, i) => {
+				if (!url) return;
+
+				trHtml.select(`[data-url="${i}"]`).setAttribute('value', url);
+				const urlCount = trHtml.select(`[data-url-status="${i}"]`).createWriteStream();
+
+				fetch(`https://api.openshare.social/job?url=${url}&key=${data.osapi}`)
+				.then(res => res.json())
+				.then(json => {
+					// URL has been counted
+					if (json.status === 'OK') {
+						urlCount.end(`
+							<span class="account-form__status-icon fa fa-check"></span> total count ${json.count}
+						`);
+					// still fetching counts
+					} else {
+						urlCount.end(
+							'<span class="account-form__status-icon fa fa-refresh"></span> fetching counts...'
+						);
+					}
+				});
 			});
 
 			html.pipe(trHtml).pipe(oppressor(req)).pipe(res);
@@ -251,21 +256,34 @@ routes.add('POST /register', (req, res) => {
 
 				setKeyGenPage(tr, data, apiKey);
 
-				data.urls.forEach(url => {
+				data.urls.forEach((url, i) => {
 					db2.set(url, apiKey, redis.print);
 					db2.get(url, (err, reply) => {
 						if (err) console.log(err);
 						console.log(reply.toString()); // Will print `OK`
 					});
-					// console.log('Counting', url);
-					// fetch('https://api.openshare.social/job?url=https://www.digitalsurgeons.com/thoughts/technology/the-blockchain-revolution/')
-					// .then(res => {
-					// 	res.json();
-					// })
-					// .then(json => {
-					// 	console.log('here');
-					// 	console.log(json);
-					// });
+
+					// loop through each URL, add to input value and count to label
+					if (!url) return;
+
+					tr.select(`[data-url="${i}"]`).setAttribute('value', url);
+					const urlCount = tr.select(`[data-url-status="${i}"]`).createWriteStream();
+
+					fetch(`https://api.openshare.social/job?url=${url}&key=${data.osapi}`)
+					.then(res => res.json())
+					.then(json => {
+						// URL has been counted
+						if (json.status === 'OK') {
+							urlCount.end(`
+								<span class="account-form__status-icon fa fa-check"></span> total count ${json.count}
+							`);
+						// still fetching counts
+						} else {
+							urlCount.end(
+								'<span class="account-form__status-icon fa fa-refresh"></span> fetching counts...'
+							);
+						}
+					});
 				});
 
 				if (data.appKey && data.secretKey) {
