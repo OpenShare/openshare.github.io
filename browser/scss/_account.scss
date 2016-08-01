@@ -121,7 +121,6 @@
 }
 
 .account-form__status {
-	color: #666;
 	font-style: italic;
 	margin: 0;
 	position: absolute;
@@ -129,9 +128,21 @@
 	top: .75em;
 }
 
+.account-form__status-link {
+	color: #666;
+
+	&:hover {
+		&,
+		.account-form__status-icon {
+			color: $blue;
+		}
+	}
+}
+
 .account-form__status-icon {
+	@include transform(translateY(2px));
 	color: #999;
-	margin-right: .4375em;
+	margin-right: .2em;
 }
 
 .account-form__input {

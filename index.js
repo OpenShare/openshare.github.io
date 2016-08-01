@@ -16,7 +16,6 @@ const cookie = require('cookie');
 const rainbow = require('rainbow-code');
 const level = require('level');
 const concat = require('concat-stream');
-const fetch = require('node-fetch');
 const db = level('db', {
 	valueEncoding: 'json',
 });
@@ -134,22 +133,12 @@ routes.add(/^GET \/@/, (req, res) => {
 
 				trHtml.select(`[data-url="${i}"]`).setAttribute('value', url);
 				const urlCount = trHtml.select(`[data-url-status="${i}"]`).createWriteStream();
-
-				fetch(`https://api.openshare.social/job?url=${url}&key=${data.osapi}`)
-				.then(res => res.json())
-				.then(json => {
-					// URL has been counted
-					if (json.status === 'OK') {
-						urlCount.end(`
-							<span class="account-form__status-icon fa fa-check"></span> total count ${json.count}
-						`);
-					// still fetching counts
-					} else {
-						urlCount.end(
-							'<span class="account-form__status-icon fa fa-refresh"></span> fetching counts...'
-						);
-					}
-				});
+				urlCount.end(`
+					<a class="account-form__status-link" href="https://api.openshare.social/job?url=${url}&key=${data.osapi}">
+						<span class="account-form__status-icon fa fa-external-link"></span>
+						view count
+					</a>
+				`);
 			});
 
 			html.pipe(trHtml).pipe(oppressor(req)).pipe(res);
@@ -266,24 +255,16 @@ routes.add('POST /register', (req, res) => {
 					// loop through each URL, add to input value and count to label
 					if (!url) return;
 
-					tr.select(`[data-url="${i}"]`).setAttribute('value', url);
-					const urlCount = tr.select(`[data-url-status="${i}"]`).createWriteStream();
+					console.log('Counting', url, i);
 
-					fetch(`https://api.openshare.social/job?url=${url}&key=${data.osapi}`)
-					.then(res => res.json())
-					.then(json => {
-						// URL has been counted
-						if (json.status === 'OK') {
-							urlCount.end(`
-								<span class="account-form__status-icon fa fa-check"></span> total count ${json.count}
-							`);
-						// still fetching counts
-						} else {
-							urlCount.end(
-								'<span class="account-form__status-icon fa fa-refresh"></span> fetching counts...'
-							);
-						}
-					});
+					tr.select(`[data-url-status="${i}"]`)
+					.createWriteStream()
+					.end(`
+						<a class="account-form__status-link" href="https://api.openshare.social/job?url=${url}&key=${apiKey}">
+							<span class="account-form__status-icon fa fa-external-link"></span>
+							view count
+						</a>
+					`);
 				});
 
 				if (data.appKey && data.secretKey) {
