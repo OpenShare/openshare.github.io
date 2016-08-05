@@ -27,6 +27,10 @@ const redisOpts = {
 	port: 6379,
 };
 
+const db1Opts = Object.assign({}, redisOpts, {
+	db: 1,
+});
+
 const db2Opts = Object.assign({}, redisOpts, {
 	db: 2,
 });
@@ -35,6 +39,7 @@ const db3Opts = Object.assign({}, redisOpts, {
 	db: 3,
 });
 
+const db1 = redis.createClient(db1Opts);
 const db2 = redis.createClient(db2Opts);
 const db3 = redis.createClient(db3Opts);
 
@@ -212,25 +217,37 @@ routes.add('POST /register', (req, res) => {
 			const hasKeys = data.appKey && data.secretKey;
 			const hasUrls = data.urls.length > 0 && data.urls.length <= 5;
 
-			const now = new Date().getTime()
-				.toString()
-				.slice(5);
-
-			const id = crypto.randomBytes(5).toString('hex');
-			const apiKey = now + id;
-
-			const payload = Object.assign({}, data, {
-				osapi: apiKey,
-			});
 
 			if (data.screen_name || !hasKeys || !hasUrls) {
 				res.end('Data must only be consumer keys and URLs.');
 			} else {
+				const now = new Date().getTime()
+					.toString()
+					.slice(5);
+
+				const id = crypto.randomBytes(5).toString('hex');
+
+				const apiKey = sessions[cookies.session].data.osapi ?
+					sessions[cookies.session].data.osapi :
+					now + id;
+
+				const payload = Object.assign({}, data, { osapi: apiKey });
+
 				const userData = Object.assign({}, sessions[cookies.session].data, payload);
 				sessions[cookies.session].data = userData;
 
 				db.get(userData.screen_name, (err, value) => {
 					const newData = Object.assign({}, value, userData);
+
+					if (data.urls && value.urls) {
+						const diff = value.urls.filter(i => data.urls.indexOf(i) === -1);
+
+						diff.forEach(url => {
+							db1.zrem('timestamp', url);
+							db1.del(url);
+							db2.del(url);
+						});
+					}
 
 					db.put(userData.screen_name, newData, err => {
 						if (err) {
@@ -247,31 +264,50 @@ routes.add('POST /register', (req, res) => {
 
 				const spans = [];
 
-				data.urls.forEach((url, i) => {
-					db2.set(url, apiKey, redis.print);
-					db2.get(url, (err, reply) => {
-						if (err) console.log(err);
-						console.log(reply.toString()); // Will print `OK`
-					});
-
+				data.urls.forEach(url => {
 					// loop through each URL, add to input value and count to label
 					if (!url) return;
 
-					console.log('Counting', url, i);
-
-					spans.push(`
-						<a class="account-form__status-link" href="https://api.openshare.social/job?url=${url}&key=${apiKey}">
-							<span class="account-form__status-icon fa fa-external-link"></span>
-							view count
-						</a>
-					`);
+					db2.get(url, (err, reply) => {
+						if (err) console.log(err);
+						if (reply && reply.toString() === apiKey) {
+							console.log('found', reply.toString(), apiKey);
+							spans.push(`
+								<a class="account-form__status-link" href="https://api.openshare.social/job?url=${url}&key=${apiKey}">
+									<span class="account-form__status-icon fa fa-external-link"></span>
+									view count
+								</a>
+							`);
+							return;
+						}
+						if (reply && reply.toString() !== apiKey) {
+							console.log(url, 'is being used by', apiKey, reply.toString());
+							spans.push(`
+								<a class="account-form__status-link">
+									<span class="account-form__status-icon fa fa-external-link"></span>
+									This URL is in use with a different account.
+								</a>
+							`);
+							return;
+						}
+						if (reply === null) {
+							console.log(url, 'not found. adding to redis');
+							spans.push(`
+								<a class="account-form__status-link" href="https://api.openshare.social/job?url=${url}&key=${apiKey}">
+									<span class="account-form__status-icon fa fa-external-link"></span>
+									view count
+								</a>
+							`);
+							db2.set(url, apiKey, redis.print);
+						}
+					});
 				});
 
 				if (data.appKey && data.secretKey) {
 					db3.set(apiKey, `${data.appKey} | ${data.secretKey}`, redis.print);
 					db3.get(apiKey, (err, reply) => {
 						if (err) console.log(err);
-						console.log(reply.toString()); // Will print `OK`
+						console.log(reply.toString());
 					});
 				}
 
@@ -316,7 +352,11 @@ routes.add('POST /delete', (req, res) => {
 				res.end();
 			} else {
 				if (data.urls) {
-					data.urls.forEach(url => db2.del(url));
+					data.urls.forEach(url => {
+						db1.zrem('timestamp', url);
+						db1.del(url);
+						db2.del(url);
+					});
 				}
 				if (data.appKey && data.secretKey) {
 					db3.del(`${data.appKey} | ${data.secretKey}`);
