@@ -1,4 +1,4 @@
-require('open-share');
+require('openshare');
 const xhr = require('xhr');
 const animationMods = ['square', 'diamond', 'rectangle', 'rectangle-vert'];
 
