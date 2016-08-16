@@ -1,0 +1,23 @@
+.more-urls {
+	@include transition(.3s);
+	display: none;
+	margin-top: 1.25em;
+	max-width: 25em;
+	opacity: 0;
+}
+
+.more-urls__body {
+	font-size: .8125em;
+}
+
+.more-urls__inputs {
+	@include display(flex);
+}
+
+.more-urls--display {
+	display: block;
+}
+
+.more-urls--show {
+	opacity: 1;
+}

@@ -196,22 +196,6 @@
 	font-size: .8125em;
 }
 
-.more-urls {
-	@include transition(.3s);
-	display: none;
-	margin-top: 1.25em;
-	max-width: 25em;
-	opacity: 0;
-}
-
-.more-urls--display {
-	@include display(flex);
-}
-
-.more-urls--show {
-	opacity: 1;
-}
-
 .account__success {
 	@include transition(.3s);
 	line-height: 0;
