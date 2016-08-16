@@ -14,8 +14,8 @@ const ui = {
 	accountSetup: document.querySelector('[data-account-setup]'),
 	moreUrlsLinks: document.querySelectorAll('[data-more-urls-link]'),
 	moreUrls: document.querySelector('[data-more-urls-form]'),
-	tokenExampleLink: document.querySelector('[data-token-example-link]'),
-	tokenExample: document.querySelector('[data-token-example]'),
+	appExampleLink: document.querySelector('[data-app-example-link]'),
+	appExample: document.querySelector('[data-app-example]'),
 	success: document.querySelector('[data-success]'),
 	urlInstruction: document.querySelector('[data-url-instruction]'),
 	deleteAccount: document.querySelector('[data-delete-account]'),
@@ -197,13 +197,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 
-	if (isInPage(ui.tokenExampleLink)) {
-		ui.tokenExampleLink.addEventListener('click', e => {
+	if (isInPage(ui.appExampleLink)) {
+		ui.appExampleLink.addEventListener('click', e => {
 			e.preventDefault();
-			ui.tokenExample.classList.add('account__token-example--display');
+			ui.appExample.classList.add('account__app-examples--display');
+			ui.appExampleLink.style.display = 'none';
 
 			setTimeout(() => {
-				ui.tokenExample.classList.add('account__token-example--show');
+				ui.appExample.classList.add('account__app-examples--show');
 			}, 200);
 		});
 	}

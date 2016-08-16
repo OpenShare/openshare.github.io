@@ -42,16 +42,16 @@
 	}
 }
 
-.account__token-example {
+.account__app-examples {
 	@include transition(.3s);
 	display: none;
 }
 
-.account__token-example--display {
+.account__app-examples--display {
 	display: block;
 }
 
-.account__token-example--show {
+.account__app-examples--show {
 	opacity: 1;
 }
 
