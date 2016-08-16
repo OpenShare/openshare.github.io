@@ -4,7 +4,7 @@ const animationMods = ['square', 'diamond', 'rectangle', 'rectangle-vert'];
 
 const ui = {
 	openShareNodes: document.querySelectorAll('.open-share-examples [data-open-share]'),
-	burger: document.querySelector('.burger-icon'),
+	burger: document.querySelector('.header__burger'),
 	nav: document.querySelector('.header__nav'),
 	appKey: document.getElementById('app-key'),
 	secretKey: document.getElementById('secret-key'),
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	if (isInPage(ui.burger)) {
 		ui.burger.addEventListener('click', () => {
-			ui.burger.classList.toggle('active');
+			ui.burger.querySelector('.burger-icon').classList.toggle('active');
 			ui.nav.classList.toggle('active');
 		});
 	}

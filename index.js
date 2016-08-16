@@ -78,7 +78,7 @@ routes.add('GET /', (req, res) => {
 		const page = fs.createReadStream('browser/index.html');
 
 		const header = tr.select('.header__nav');
-		header.setAttribute('class', 'header__nav--logged-in');
+		header.setAttribute('class', 'header__nav header__nav--logged-in');
 
 		const btn = tr.select('.header__nav-btn');
 		btn.setAttribute('class', 'header__nav-item--hide');

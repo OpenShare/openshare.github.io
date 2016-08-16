@@ -60,8 +60,9 @@
 }
 
 .header__nav--logged-in {
-	@extend .header__nav;
-	padding-right: 3.75em;
+	@include media($large-screen) {
+		padding-right: 3.75em;
+	}
 }
 
 .header__nav-list {
