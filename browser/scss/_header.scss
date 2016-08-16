@@ -12,7 +12,7 @@
 .header-background {
 	background: url('../img/bg-masthead.jpg') no-repeat center center;
 	background-size: cover;
-	padding: .75em 1.25em 1.75em;
+	padding: .75em 0 1.75em;
 
 	.header {
 		@extend %outer-container;
@@ -24,7 +24,6 @@
 	font-weight: 200;
 	letter-spacing: 5px;
 	margin: .638888889em 0 0;
-	text-align: center;
 	text-transform: uppercase;
 
 	@include media(333px) {

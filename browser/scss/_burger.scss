@@ -3,145 +3,129 @@
 // (---) top    -> &::before
 // [---] middle -> &
 // (---) bottom -> &::after
-
-
 // Vendor prefixes
 $sass-burger-add-vendor-prefixes: true !default;
-
 // Burger
 @mixin burger($width: 30px, $height: 5px, $gutter: 3px, $color: #000, $border-radius: 0, $transition-duration: .3s) {
-    $burger-height: $height !global;
-    $burger-gutter: $gutter !global;
-
-    position: relative;
-    margin-top: $height + $gutter;
-    margin-bottom: $height + $gutter;
-
-    @if $sass-burger-add-vendor-prefixes {
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-    }
-    user-select: none;
-
-    &, &::before, &::after {
-        display: block;
-        width: $width;
-        height: $height;
-        background-color: $color;
-        @if $border-radius != 0 {
-            border-radius: $border-radius;
-        }
-
-        @if $sass-burger-add-vendor-prefixes {
-            -webkit-transition-property: background-color, -webkit-transform;
-            -moz-transition-property: background-color, -moz-transform;
-            -o-transition-property: background-color, -o-transform;
-        }
-        transition-property: background-color, transform;
-
-        @if $sass-burger-add-vendor-prefixes {
-            -webkit-transition-duration: $transition-duration;
-            -moz-transition-duration: $transition-duration;
-            -o-transition-duration: $transition-duration;
-        }
-        transition-duration: $transition-duration;
-    }
-
-	& {
-		display: inline-block;
+	$burger-height: $height !global;
+	$burger-gutter: $gutter !global;
+	position: relative;
+	margin-top: $height + $gutter;
+	margin-bottom: $height + $gutter;
+	@if $sass-burger-add-vendor-prefixes {
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-webkit-user-select: none;
+		user-select: none;
 	}
 
-    &::before, &::after {
-        position: absolute;
-        content: "";
-    }
+	&,
+	&::after,
+	&::before {
+		background-color: $color;
+		cursor: default;
+		display: block;
+		height: $height;
+		transition-duration: $transition-duration;
+		transition-property: background-color, transform;
+		width: $width;
+		@if $border-radius != 0 {
+			border-radius: $border-radius;
+		}
+		@if $sass-burger-add-vendor-prefixes {
+			-moz-transition-property: background-color, -moz-transform;
+			-o-transition-property: background-color, -o-transform;
+			-webkit-transition-property: background-color, -webkit-transform;
+		}
+		@if $sass-burger-add-vendor-prefixes {
+			-moz-transition-duration: $transition-duration;
+			-o-transition-duration: $transition-duration;
+			-webkit-transition-duration: $transition-duration;
+		}
+	}
 
-    &::before {
-        top: -($height + $gutter);
-    }
+	&::after,
+	&::before {
+		content: '';
+		position: absolute;
+	}
 
-    &::after {
-        top: $height + $gutter;
-    }
+	&::before {
+		top: -($height + $gutter);
+	}
+
+	&::after {
+		top: $height + $gutter;
+	}
 }
-
-
 // Select parts of the burger
 @mixin burger-parts {
-    &, &::before, &::after {
-        @content;
-    }
+	&,
+	&::after,
+	&::before {
+		@content;
+	}
 }
 
 @mixin burger-top {
-    &::before {
-        @content;
-    }
+	&::before {
+		@content;
+	}
 }
 
 @mixin burger-middle {
-    & {
-        @content;
-    }
+	@content;
 }
 
 @mixin burger-bottom {
-    &::after {
-        @content;
-    }
+	&::after {
+		@content;
+	}
 }
-
-
 // Burger animations
 @mixin burger-to-cross($color: auto) {
-    & {
-        background-color: transparent;
-    }
-    @if ($color != auto) {
-        &::before, &::after {
-            background-color: $color;
-        }
-    }
-    &::before {
-        @if $sass-burger-add-vendor-prefixes {
-            -webkit-transform: translateY($burger-gutter + $burger-height) rotate(45deg);
-            -moz-transform: translateY($burger-gutter + $burger-height) rotate(45deg);
-            -ms-transform: translateY($burger-gutter + $burger-height) rotate(45deg);
-            -o-transform: translateY($burger-gutter + $burger-height) rotate(45deg);
-        }
-        transform: translateY($burger-gutter + $burger-height) rotate(45deg);
-    }
-    &::after {
-        @if $sass-burger-add-vendor-prefixes {
-            -webkit-transform: translateY(-($burger-gutter + $burger-height)) rotate(-45deg);
-            -moz-transform: translateY(-($burger-gutter + $burger-height)) rotate(-45deg);
-            -ms-transform: translateY(-($burger-gutter + $burger-height)) rotate(-45deg);
-            -o-transform: translateY(-($burger-gutter + $burger-height)) rotate(-45deg);
-        }
-        transform: translateY(-($burger-gutter + $burger-height)) rotate(-45deg);
-    }
+	background-color: transparent;
+
+	@if ($color != auto) {
+		&::after,
+		&::before {
+			background-color: $color;
+		}
+	}
+
+	&::before {
+		transform: translateY($burger-gutter + $burger-height) rotate(45deg);
+		@if $sass-burger-add-vendor-prefixes {
+			-moz-transform: translateY($burger-gutter + $burger-height) rotate(45deg);
+			-ms-transform: translateY($burger-gutter + $burger-height) rotate(45deg);
+			-o-transform: translateY($burger-gutter + $burger-height) rotate(45deg);
+			-webkit-transform: translateY($burger-gutter + $burger-height) rotate(45deg);
+		}
+	}
+
+	&::after {
+		transform: translateY(-($burger-gutter + $burger-height)) rotate(-45deg);
+		@if $sass-burger-add-vendor-prefixes {
+			-moz-transform: translateY(-($burger-gutter + $burger-height)) rotate(-45deg);
+			-ms-transform: translateY(-($burger-gutter + $burger-height)) rotate(-45deg);
+			-o-transform: translateY(-($burger-gutter + $burger-height)) rotate(-45deg);
+			-webkit-transform: translateY(-($burger-gutter + $burger-height)) rotate(-45deg);
+		}
+	}
 }
 
 .burger-icon {
 	@include burger(25px, 4px, 5px, #fff);
-	top: -1px;
-	right: -20px;
+	position: absolute;
+	right: 20px;
+	top: 5px;
 
-	@include media(415px) {
-		position: absolute;
-		top: 38px;
-		right: 30px;
-	};
+	@include media($medium-screen) {
+		top: 28px;
+	}
 
 	@include media($large-screen) {
 		display: none;
-	}
-
-	.header-background & {
-		@include media(415px) {
-			top: 30px;
-		};
 	}
 }
 
