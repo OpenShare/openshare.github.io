@@ -149,7 +149,7 @@
 	@include transition(.3s);
 	border: solid 2px rgb(238, 238, 238);
 	margin-bottom: .625em;
-	padding: .625em 1.625em .625em .625em;
+	padding: .625em;
 	width: 100%;
 
 	&:focus {
@@ -158,13 +158,16 @@
 	}
 }
 
+.account-form__input--status {
+	padding-right: 10.625em;
+}
+
 .account-form__input--error {
 	background: rgba(100, 0, 0, .1);
 	border-color: #a00;
 }
 
 .account-form__input--no-margin {
-	@extend .account-form__input;
 	margin-bottom: 0;
 }
 
