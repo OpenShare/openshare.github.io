@@ -499,11 +499,16 @@ function setKeyGenPage(tr, data, apiKey) {
 	const highlighted = {
 		js: rainbow.colorSync(
 			`const OpenShare = require('openshare');
-OpenShare.setKey('${apiKey}');`,
-			'javascript'
+OpenShare.count({
+    type: 'twitter',
+    url: 'http://www.digitalsurgeons.com',
+    key: '${apiKey}'
+});`, 'javascript'
 		),
 		html: rainbow.colorSync(
-			`<script data-key="${apiKey}" src="/path/to/openshare.js"></script>`,
+			`<span data-open-share-count="twitter"
+      data-open-share-count-url="http://www.digitalsurgeons.com"
+      data-open-share-key="${apiKey}"></span>`,
 			'html'
 		),
 		key: apiKey,
