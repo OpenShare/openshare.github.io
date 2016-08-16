@@ -16,6 +16,7 @@ const cookie = require('cookie');
 const rainbow = require('rainbow-code');
 const level = require('level');
 const concat = require('concat-stream');
+const twittertext = require('twitter-text');
 const db = level('db', {
 	valueEncoding: 'json',
 });
@@ -489,7 +490,7 @@ function setupPersonalPage(tr, data) {
 	username.createWriteStream().end(data.screen_name);
 
 	const bio = tr.select('.account__bio');
-	bio.createWriteStream().end(data.description);
+	bio.createWriteStream().end(twittertext.autoLink(data.description));
 
 	const header = tr.select('.account__header');
 	header.setAttribute('style', `background-image: url('${data.profile_banner_url}');`);

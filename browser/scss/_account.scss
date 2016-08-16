@@ -79,6 +79,18 @@
 	max-width: 37.5em;
 	padding: 1.25em 0;
 	text-align: center;
+
+	a,
+	a:visited,
+	a:active,
+	a:focus {
+		@include transition(.3s);
+		color: $white;
+	}
+
+	a:hover {
+		color: lighten($blue, 10%);
+	}
 }
 
 .account__username {
