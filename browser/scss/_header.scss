@@ -30,7 +30,7 @@
 		font-size: 2.25em;
 	};
 
-	@include media($medium-screen) {
+	@include media($large-screen) {
 		float: left;
 	}
 }
@@ -104,4 +104,15 @@
 .header__btn {
 	font-size: .8em;
 	padding: 1em 1.25em 0;
+}
+
+.header__burger {
+	display: block;
+	position: absolute;
+	right: 20px;
+	top: 5px;
+
+	@include media($large-screen) {
+		display: none;
+	}
 }

@@ -23,7 +23,6 @@ $sass-burger-add-vendor-prefixes: true !default;
 	&::after,
 	&::before {
 		background-color: $color;
-		cursor: default;
 		display: block;
 		height: $height;
 		transition-duration: $transition-duration;
@@ -116,17 +115,6 @@ $sass-burger-add-vendor-prefixes: true !default;
 
 .burger-icon {
 	@include burger(25px, 4px, 5px, #fff);
-	position: absolute;
-	right: 20px;
-	top: 5px;
-
-	@include media($medium-screen) {
-		top: 28px;
-	}
-
-	@include media($large-screen) {
-		display: none;
-	}
 }
 
 .burger-icon.active {
