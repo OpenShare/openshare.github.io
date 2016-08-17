@@ -28,6 +28,10 @@ const redisOpts = {
 	port: 6379,
 };
 
+const db0Opts = Object.assign({}, redisOpts, {
+	db: 0,
+});
+
 const db1Opts = Object.assign({}, redisOpts, {
 	db: 1,
 });
@@ -40,6 +44,7 @@ const db3Opts = Object.assign({}, redisOpts, {
 	db: 3,
 });
 
+const db0 = redis.createClient(db0Opts);
 const db1 = redis.createClient(db1Opts);
 const db2 = redis.createClient(db2Opts);
 const db3 = redis.createClient(db3Opts);
@@ -139,12 +144,15 @@ routes.add(/^GET \/@/, (req, res) => {
 
 				trHtml.select(`[data-url="${i}"]`).setAttribute('value', url);
 				const urlCount = trHtml.select(`[data-url-status="${i}"]`).createWriteStream();
-				urlCount.end(`
-					<a class="account-form__status-link" href="https://api.openshare.social/job?url=${url}&key=${data.osapi}">
-						<span class="account-form__status-icon fa fa-external-link"></span>
-						view count
-					</a>
-				`);
+				db0.get(url, (err, reply) => {
+					if (err) console.error(err);
+					urlCount.end(`
+						<a class="account-form__status-link" href="https://api.openshare.social/job?url=${url}&key=${data.osapi}">
+							<span class="account-form__status-icon fa fa-external-link"></span>
+							${reply};
+						</a>
+					`);
+				});
 			});
 
 			html.pipe(trHtml).pipe(oppressor(req)).pipe(res);
