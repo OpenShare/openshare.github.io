@@ -21,6 +21,8 @@ const db = level('db', {
 	valueEncoding: 'json',
 });
 
+const cbPort = '127.0.0.1' || process.env.ipAddr;
+
 const redis = require('redis');
 
 const redisOpts = {
@@ -63,7 +65,7 @@ const sessions = {};
 const twitter = Twitter({
 	consumerKey: process.env.consumerKey,
 	consumerSecret: process.env.consumerSecret,
-	callback: 'http://127.0.0.1:9090/twitter/auth/success',
+	callback: `http://${cbPort}:9090/twitter/auth/success`,
 });
 
 // server gzipped static files from the dist folder
