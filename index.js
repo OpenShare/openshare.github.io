@@ -149,9 +149,8 @@ routes.add(/^GET \/@/, (req, res) => {
 				db0.get(url, (err, reply) => {
 					if (err) console.error(err);
 					urlCount.end(`
-						<a class="account-form__status-link" href="https://api.openshare.social/job?url=${url}&key=${data.osapi}">
-							<span class="account-form__status-icon fa fa-external-link"></span>
-							${reply};
+						<span class="account-form__status-link">
+							${reply || 'Receiving Twitter counts. Please check back soon.'}
 						</a>
 					`);
 				});
@@ -283,30 +282,30 @@ routes.add('POST /register', (req, res) => {
 						if (err) console.log(err);
 						if (reply && reply.toString() === apiKey) {
 							console.log('found', reply.toString(), apiKey);
-							spans.push(`
-								<a class="account-form__status-link" href="https://api.openshare.social/job?url=${url}&key=${apiKey}">
-									<span class="account-form__status-icon fa fa-external-link"></span>
-									view count
-								</a>
-							`);
+							db0.get(url, (err, reply) => {
+								if (err) console.error(err);
+								spans.push(`
+									<span class="account-form__status-link">
+										${reply}
+									</a>
+								`);
+							});
 							return;
 						}
 						if (reply && reply.toString() !== apiKey) {
 							console.log(url, 'is being used by', apiKey, reply.toString());
 							spans.push(`
-								<a class="account-form__status-link">
-									<span class="account-form__status-icon fa fa-external-link"></span>
+								<span class="account-form__status-link">
 									This URL is in use with a different account.
-								</a>
+								</span>
 							`);
 							return;
 						}
 						if (reply === null) {
 							console.log(url, 'not found. adding to redis');
 							spans.push(`
-								<a class="account-form__status-link" href="https://api.openshare.social/job?url=${url}&key=${apiKey}">
-									<span class="account-form__status-icon fa fa-external-link"></span>
-									view count
+								<span class="account-form__status-link">
+									${'Receiving Twitter counts. Please check back soon.'}
 								</a>
 							`);
 							db2.set(url, apiKey, redis.print);
@@ -512,13 +511,13 @@ function setKeyGenPage(tr, data, apiKey) {
 			`const OpenShare = require('openshare');
 OpenShare.count({
     type: 'twitter',
-    url: 'http://www.digitalsurgeons.com',
+    url: '${data.urls[0]}',
     key: '${apiKey}'
 });`, 'javascript'
 		),
 		html: rainbow.colorSync(
 			`<span data-open-share-count="twitter"
-      data-open-share-count-url="http://www.digitalsurgeons.com"
+      data-open-share-count-url='${data.urls[0]}'
       data-open-share-key="${apiKey}"></span>`,
 			'html'
 		),
