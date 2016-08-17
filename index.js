@@ -21,7 +21,7 @@ const db = level('db', {
 	valueEncoding: 'json',
 });
 
-const cbPort = '127.0.0.1' || process.env.ipAddr;
+const cbPort = process.env.ip || '127.0.0.1';
 
 const redis = require('redis');
 
