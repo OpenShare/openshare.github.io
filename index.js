@@ -65,7 +65,7 @@ const sessions = {};
 const twitter = Twitter({
 	consumerKey: process.env.consumerKey,
 	consumerSecret: process.env.consumerSecret,
-	callback: 'http://openshare.social/twitter/auth/success',
+	callback: 'https://openshare.social/twitter/auth/success',
 });
 
 // server gzipped static files from the dist folder
