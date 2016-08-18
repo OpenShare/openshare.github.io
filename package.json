@@ -56,6 +56,7 @@
     "body": "^5.1.0",
     "concat-stream": "^1.5.1",
     "cookie": "^0.3.1",
+    "ecstatic": "^2.1.0",
     "has": "^1.0.1",
     "level": "^1.4.0",
     "node-fetch": "^1.5.3",

@@ -5,7 +5,7 @@ const crypto = require('crypto'); // crypto
 
 // useful npm modules that do one thing and one thing well (unix philosophy)
 const routes = require('patterns')(); // http router
-const st = require('st'); // static file server
+const st = require('ecstatic'); // static file server
 const body = require('body/json'); // form body parser
 // const oppressor = require('oppressor'); // gzip
 const Twitter = require('node-twitter-api');
@@ -70,8 +70,11 @@ const twitter = Twitter({
 
 // server gzipped static files from the dist folder
 const serve = st({
-	path: 'browser/dist/',
-	cache: false, // edit or delete this line for production
+	root: 'browser/dist/',
+	cache: false, // edit or delete this line for production,
+	showDir: false,
+	autoIndex: '/browser',
+	defaultExt: 'html',
 });
 
 // routing
@@ -420,6 +423,38 @@ routes.add('POST /delete', (req, res) => {
 		});
 
 		res.end();
+	}
+});
+
+routes.add(/^GET \/\?/, (req, res) => {
+	const cookies = cookie.parse(req.headers.cookie || '');
+	const isSession = cookies.session && has(sessions, cookies.session);
+
+	if (isSession) {
+		const data = sessions[cookies.session].data;
+
+		const tr = trumpet();
+		const page = fs.createReadStream('browser/index.html');
+
+		const header = tr.select('.header__nav');
+		header.setAttribute('class', 'header__nav header__nav--logged-in');
+
+		const btn = tr.select('.header__nav-btn');
+		btn.setAttribute('class', 'header__nav-item--hide');
+
+		const avatarItem = tr.select('.header__nav-avatar');
+		avatarItem.setAttribute('class', 'header__nav-item');
+
+		const avatar = tr.select('.avatar');
+		avatar.setAttribute('href', `/@${data.screen_name}`);
+
+		const avatarImg = tr.select('.avatar__img');
+		avatarImg.setAttribute('href', `/@${data.screen_name}`);
+		avatarImg.setAttribute('src', data.profile_image_url_https);
+
+		page.pipe(tr).pipe(res);
+	} else {
+		render('index')(req, res);
 	}
 });
 
