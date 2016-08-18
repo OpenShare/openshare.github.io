@@ -142,7 +142,9 @@
 
 .account-form__status-link {
 	color: #666;
-
+	@media (max-width: 900px) {
+		display: none;
+	}
 	&:hover {
 		&,
 		.account-form__status-icon {
