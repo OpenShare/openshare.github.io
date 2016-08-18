@@ -7,7 +7,7 @@ const crypto = require('crypto'); // crypto
 const routes = require('patterns')(); // http router
 const st = require('st'); // static file server
 const body = require('body/json'); // form body parser
-const oppressor = require('oppressor'); // gzip
+// const oppressor = require('oppressor'); // gzip
 const Twitter = require('node-twitter-api');
 const url = require('url');
 const trumpet = require('trumpet');
@@ -101,7 +101,7 @@ routes.add('GET /', (req, res) => {
 		avatarImg.setAttribute('href', `/@${data.screen_name}`);
 		avatarImg.setAttribute('src', data.profile_image_url_https);
 
-		page.pipe(tr).pipe(oppressor(req)).pipe(res);
+		page.pipe(tr).pipe(res);
 	} else {
 		render('index')(req, res);
 	}
@@ -156,13 +156,13 @@ routes.add(/^GET \/@/, (req, res) => {
 				});
 			});
 
-			html.pipe(trHtml).pipe(oppressor(req)).pipe(res);
+			html.pipe(trHtml).pipe(res);
 		} else {
 			const tr = trumpet();
 			const page = fs.createReadStream('browser/account.html');
 
 			setupPersonalPage(tr, data);
-			page.pipe(tr).pipe(oppressor(req)).pipe(res);
+			page.pipe(tr).pipe(res);
 		}
 	} else {
 		res.writeHead(302, {
@@ -416,7 +416,6 @@ function render(page) {
 		res.setHeader('content-type', 'text/html');
 
 		fs.createReadStream(`browser/${page}.html`)
-		.pipe(oppressor(req))
 		.pipe(res);
 	};
 }
