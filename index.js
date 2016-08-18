@@ -286,7 +286,7 @@ routes.add('POST /register', (req, res) => {
 								if (err) console.error(err);
 								spans.push(`
 									<span class="account-form__status-link">
-										${reply}
+										${reply || 'Receiving Twitter counts. Please check back soon.'}
 									</a>
 								`);
 							});
