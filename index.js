@@ -107,7 +107,37 @@ routes.add('GET /', (req, res) => {
 	}
 });
 
-routes.add('GET /examples', render('examples'));
+routes.add('GET /examples', (req, res) => {
+	const cookies = cookie.parse(req.headers.cookie || '');
+	const isSession = cookies.session && has(sessions, cookies.session);
+
+	if (isSession) {
+		const data = sessions[cookies.session].data;
+
+		const tr = trumpet();
+		const page = fs.createReadStream('browser/examples.html');
+
+		const header = tr.select('.header__nav');
+		header.setAttribute('class', 'header__nav header__nav--logged-in');
+
+		const btn = tr.select('.header__nav-btn');
+		btn.setAttribute('class', 'header__nav-item--hide');
+
+		const avatarItem = tr.select('.header__nav-avatar');
+		avatarItem.setAttribute('class', 'header__nav-item');
+
+		const avatar = tr.select('.avatar');
+		avatar.setAttribute('href', `/@${data.screen_name}`);
+
+		const avatarImg = tr.select('.avatar__img');
+		avatarImg.setAttribute('href', `/@${data.screen_name}`);
+		avatarImg.setAttribute('src', data.profile_image_url_https);
+
+		page.pipe(tr).pipe(res);
+	} else {
+		render('examples')(req, res);
+	}
+});
 
 routes.add(/^GET \/@/, (req, res) => {
 	const cookies = cookie.parse(req.headers.cookie || '');
