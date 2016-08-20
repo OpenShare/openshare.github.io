@@ -17,6 +17,9 @@ const rainbow = require('rainbow-code');
 const level = require('level');
 const concat = require('concat-stream');
 const twittertext = require('twitter-text');
+const Slack = require('slack-node');
+
+const slack = new Slack(process.env.slack);
 const db = level('db', {
 	valueEncoding: 'json',
 });
@@ -534,6 +537,15 @@ function verifyCreds(req, res) {
 								console.error(err);
 								res.end('404', err);
 							} else {
+								slack.api('chat.postMessage', {
+									text: `@here, ${data.screen_name} has joined openshare.  https://twitter.com/${data.screen_name}`,
+									channel: '#openshare',
+									link_names: 1,
+								}, (err, res) => {
+									if (err) console.log(err);
+									console.log(res);
+								});
+
 								res.setHeader('set-cookie', `session=${sid};Path=/;`);
 
 								res.writeHead(302, {
