@@ -458,6 +458,28 @@ routes.add(/^GET \/\?/, (req, res) => {
 	}
 });
 
+routes.add('GET /dstechroom', render('dstechroom'));
+
+routes.add('POST /dstechroom', (req, res) => {
+	body(req, res, (err, data) => {
+		if (err) {
+			console.error(err);
+			res.statusCode = 404;
+			res.end(`${err} \n`);
+		} else {
+			const users = [];
+			const rs = db.createKeyStream();
+			rs.on('data', user => {
+				users.push(user);
+			});
+
+			rs.on('end', () => {
+				res.end(JSON.stringify(users));
+			});
+		}
+	});
+});
+
 // http server
 // if the request method and url is a defined route then call it's function
 // else serve a static file from the dist folder, or 404

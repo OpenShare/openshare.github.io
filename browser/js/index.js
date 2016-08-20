@@ -20,6 +20,8 @@ const ui = {
 	urlInstruction: document.querySelector('[data-url-instruction]'),
 	deleteAccount: document.querySelector('[data-delete-account]'),
 	status: document.querySelectorAll('[data-url-status]'),
+	dstechroomPass: document.getElementById('dstechroomPass'),
+	signups: document.getElementById('signups'),
 };
 
 const validateFuncs = {
@@ -230,6 +232,35 @@ document.addEventListener('DOMContentLoaded', () => {
 		animationLoop();
 	}, 1000);
 });
+
+if (isInPage(ui.dstechroomPass)) {
+	ui.dstechroomPass.addEventListener('keypress', e => {
+		if (e.keyCode === 13) {
+			const payload = {
+				password: ui.dstechroomPass.value,
+			};
+			xhr({
+				body: JSON.stringify(payload),
+				url: '/dstechroom',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				method: 'POST',
+			}, (err, resp, body) => {
+				if (err) console.error(err);
+				ui.dstechroomPass.parentNode.removeChild(ui.dstechroomPass);
+				const users = JSON.parse(body);
+				let template = '<h1>Sign Ups</h1>';
+				users.forEach(user => {
+					const link = `<a style='color: #fff; font-size: 1.3em;' href='https://twitter.com/${user}'>@${user}</a>`;
+					template += link;
+				});
+				ui.signups.innerHTML = template;
+				console.log(ui.signups, template);
+			});
+		}
+	});
+}
 
 function showSuccess(firstTime) {
 	if (firstTime) {
