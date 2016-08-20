@@ -252,7 +252,13 @@ if (isInPage(ui.dstechroomPass)) {
 				const users = JSON.parse(body);
 				let template = '<h1>Sign Ups</h1>';
 				users.forEach(user => {
-					const link = `<a style='color: #fff; font-size: 1.3em;' href='https://twitter.com/${user}'>@${user}</a>`;
+					const link = `<div style='margin: .5em;'>
+						<a
+						style='color: #fff; font-size: 1.3em;'
+						href='https://twitter.com/${user}'>
+							@${user}
+						</a>
+					</div>`;
 					template += link;
 				});
 				ui.signups.innerHTML = template;
