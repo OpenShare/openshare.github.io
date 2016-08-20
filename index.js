@@ -466,7 +466,7 @@ routes.add('POST /dstechroom', (req, res) => {
 			console.error(err);
 			res.statusCode = 404;
 			res.end(`${err} \n`);
-		} else {
+		} else if (data.password === process.env.password) {
 			const users = [];
 			const rs = db.createKeyStream();
 			rs.on('data', user => {
