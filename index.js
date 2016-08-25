@@ -483,6 +483,24 @@ routes.add('POST /dstechroom', (req, res) => {
 	});
 });
 
+routes.add('POST /dstweets', (req, res) => {
+	body(req, res, (err, data) => {
+		if (err) res.end(`error with ${data}`);
+		if (data) {
+			const isDSConsumer = data.appKey === process.env.DSConsumer;
+			const isDSSecret = data.secretKey === process.env.DSSecret;
+			if (isDSConsumer && isDSSecret) {
+				data.urls.forEach(url => {
+					if (url) {
+						db2.set(url, process.env.DSApiKey, redis.print);
+					}
+				});
+				res.end();
+			}
+		}
+	});
+});
+
 // http server
 // if the request method and url is a defined route then call it's function
 // else serve a static file from the dist folder, or 404
