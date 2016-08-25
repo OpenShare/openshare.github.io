@@ -495,7 +495,7 @@ routes.add('POST /dstweets', (req, res) => {
 						db2.set(url, process.env.DSApiKey, redis.print);
 					}
 				});
-				res.end();
+				res.end(`Posted url: ${data.urls[0]}`);
 			}
 		}
 	});
