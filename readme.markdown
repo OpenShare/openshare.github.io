@@ -1,4 +1,4 @@
-## http://openshare.social
+## https://openshare.social
 
 #### quick start
 

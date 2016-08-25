@@ -5,9 +5,9 @@ const crypto = require('crypto'); // crypto
 
 // useful npm modules that do one thing and one thing well (unix philosophy)
 const routes = require('patterns')(); // http router
-const st = require('st'); // static file server
+const st = require('ecstatic'); // static file server
 const body = require('body/json'); // form body parser
-const oppressor = require('oppressor'); // gzip
+// const oppressor = require('oppressor'); // gzip
 const Twitter = require('node-twitter-api');
 const url = require('url');
 const trumpet = require('trumpet');
@@ -17,6 +17,9 @@ const rainbow = require('rainbow-code');
 const level = require('level');
 const concat = require('concat-stream');
 const twittertext = require('twitter-text');
+const Slack = require('slack-node');
+
+const slack = new Slack(process.env.slack);
 const db = level('db', {
 	valueEncoding: 'json',
 });
@@ -65,13 +68,16 @@ const sessions = {};
 const twitter = Twitter({
 	consumerKey: process.env.consumerKey,
 	consumerSecret: process.env.consumerSecret,
-	callback: `http://${cbPort}:9090/twitter/auth/success`,
+	callback: 'https://openshare.social/twitter/auth/success',
 });
 
 // server gzipped static files from the dist folder
 const serve = st({
-	path: 'browser/dist/',
-	cache: false, // edit or delete this line for production
+	root: 'browser/dist/',
+	cache: false, // edit or delete this line for production,
+	showDir: false,
+	autoIndex: '/browser',
+	defaultExt: 'html',
 });
 
 // routing
@@ -101,13 +107,43 @@ routes.add('GET /', (req, res) => {
 		avatarImg.setAttribute('href', `/@${data.screen_name}`);
 		avatarImg.setAttribute('src', data.profile_image_url_https);
 
-		page.pipe(tr).pipe(oppressor(req)).pipe(res);
+		page.pipe(tr).pipe(res);
 	} else {
 		render('index')(req, res);
 	}
 });
 
-routes.add('GET /examples', render('examples'));
+routes.add('GET /examples', (req, res) => {
+	const cookies = cookie.parse(req.headers.cookie || '');
+	const isSession = cookies.session && has(sessions, cookies.session);
+
+	if (isSession) {
+		const data = sessions[cookies.session].data;
+
+		const tr = trumpet();
+		const page = fs.createReadStream('browser/examples.html');
+
+		const header = tr.select('.header__nav');
+		header.setAttribute('class', 'header__nav header__nav--logged-in');
+
+		const btn = tr.select('.header__nav-btn');
+		btn.setAttribute('class', 'header__nav-item--hide');
+
+		const avatarItem = tr.select('.header__nav-avatar');
+		avatarItem.setAttribute('class', 'header__nav-item');
+
+		const avatar = tr.select('.avatar');
+		avatar.setAttribute('href', `/@${data.screen_name}`);
+
+		const avatarImg = tr.select('.avatar__img');
+		avatarImg.setAttribute('href', `/@${data.screen_name}`);
+		avatarImg.setAttribute('src', data.profile_image_url_https);
+
+		page.pipe(tr).pipe(res);
+	} else {
+		render('examples')(req, res);
+	}
+});
 
 routes.add(/^GET \/@/, (req, res) => {
 	const cookies = cookie.parse(req.headers.cookie || '');
@@ -156,13 +192,13 @@ routes.add(/^GET \/@/, (req, res) => {
 				});
 			});
 
-			html.pipe(trHtml).pipe(oppressor(req)).pipe(res);
+			html.pipe(trHtml).pipe(res);
 		} else {
 			const tr = trumpet();
 			const page = fs.createReadStream('browser/account.html');
 
 			setupPersonalPage(tr, data);
-			page.pipe(tr).pipe(oppressor(req)).pipe(res);
+			page.pipe(tr).pipe(res);
 		}
 	} else {
 		res.writeHead(302, {
@@ -393,6 +429,60 @@ routes.add('POST /delete', (req, res) => {
 	}
 });
 
+routes.add(/^GET \/\?/, (req, res) => {
+	const cookies = cookie.parse(req.headers.cookie || '');
+	const isSession = cookies.session && has(sessions, cookies.session);
+
+	if (isSession) {
+		const data = sessions[cookies.session].data;
+
+		const tr = trumpet();
+		const page = fs.createReadStream('browser/index.html');
+
+		const header = tr.select('.header__nav');
+		header.setAttribute('class', 'header__nav header__nav--logged-in');
+
+		const btn = tr.select('.header__nav-btn');
+		btn.setAttribute('class', 'header__nav-item--hide');
+
+		const avatarItem = tr.select('.header__nav-avatar');
+		avatarItem.setAttribute('class', 'header__nav-item');
+
+		const avatar = tr.select('.avatar');
+		avatar.setAttribute('href', `/@${data.screen_name}`);
+
+		const avatarImg = tr.select('.avatar__img');
+		avatarImg.setAttribute('href', `/@${data.screen_name}`);
+		avatarImg.setAttribute('src', data.profile_image_url_https);
+
+		page.pipe(tr).pipe(res);
+	} else {
+		render('index')(req, res);
+	}
+});
+
+routes.add('GET /dstechroom', render('dstechroom'));
+
+routes.add('POST /dstechroom', (req, res) => {
+	body(req, res, (err, data) => {
+		if (err) {
+			console.error(err);
+			res.statusCode = 404;
+			res.end(`${err} \n`);
+		} else if (data.password === process.env.password) {
+			const users = [];
+			const rs = db.createKeyStream();
+			rs.on('data', user => {
+				users.push(user);
+			});
+
+			rs.on('end', () => {
+				res.end(JSON.stringify(users));
+			});
+		}
+	});
+});
+
 // http server
 // if the request method and url is a defined route then call it's function
 // else serve a static file from the dist folder, or 404
@@ -416,7 +506,6 @@ function render(page) {
 		res.setHeader('content-type', 'text/html');
 
 		fs.createReadStream(`browser/${page}.html`)
-		.pipe(oppressor(req))
 		.pipe(res);
 	};
 }
@@ -448,6 +537,15 @@ function verifyCreds(req, res) {
 								console.error(err);
 								res.end('404', err);
 							} else {
+								slack.api('chat.postMessage', {
+									text: `@here, ${data.screen_name} has joined openshare.  https://twitter.com/${data.screen_name}`,
+									channel: '#openshare',
+									link_names: 1,
+								}, (err, res) => {
+									if (err) console.log(err);
+									console.log(res);
+								});
+
 								res.setHeader('set-cookie', `session=${sid};Path=/;`);
 
 								res.writeHead(302, {
