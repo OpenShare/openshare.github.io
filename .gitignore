@@ -1,6 +1,4 @@
 node_modules
-bundle.*
-*.bundle.*
 db
 *.log
 *.log*
