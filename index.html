@@ -30,7 +30,7 @@
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://file.myfontastic.com/n6vo44Re5QaWo8oCKShBs7/icons.css">
-	<link rel="stylesheet" href="/bundle.css">
+	<link rel="stylesheet" href="dist/bundle.css">
 </head>
 <body>
 
@@ -53,18 +53,10 @@
 							<a class="header__nav-link" href="/examples">Examples</a>
 						</li>
 						<li class="header__nav-item">
-							<a class="header__nav-link" href="https://github.com/dsurgeons/OpenShare/wiki">Docs</a>
+							<a class="header__nav-link" href="https://github.com/OpenShare/OpenShare/wiki">Docs</a>
 						</li>
 						<li class="header__nav-item">
-							<a class="header__nav-link" href="https://github.com/dsurgeons/OpenShare">GitHub</a>
-						</li>
-						<li class="header__nav-item header__nav-btn">
-							<a class="header__btn btn" href="/twitter/auth"><span class="fa fa-twitter"></span> Sign in</a>
-						</li>
-						<li class="header__nav-item--hide header__nav-avatar">
-							<a class="avatar" href="#">
-								<img class="avatar__img" src="" />
-							</a>
+							<a class="header__nav-link" href="https://github.com/OpenShare/OpenShare">GitHub</a>
 						</li>
 					</ul>
 				</nav>
@@ -95,11 +87,6 @@
 		            data-open-share-text="#OpenShare, customizable API wrappers for social platforms -">
 
 					<span class="open-share-example__icon socicon-twitter"></span>
-					<span class="open-share-example__count"
-					data-open-share-count="twitter"
-					data-open-share-key="dstweets"
-					data-open-share-count-url="https://openshare.social">
-					</span>
 					</a>
 
 					<a class="open-share-example" href="#"
@@ -189,15 +176,15 @@
 				</div>
 
 				<div class="masthead__ctas ctas">
-					<a class="ctas__cta btn" href="https://github.com/dsurgeons/OpenShare/wiki/1.-Getting-Started">Get Started</a>
-					<a class="ctas__cta btn--dark" href="https://github.com/dsurgeons/OpenShare">
+					<a class="ctas__cta btn" href="https://github.com/OpenShare/openshare/wiki/1.-Getting-Started">Get Started</a>
+					<a class="ctas__cta btn--dark" href="https://github.com/OpenShare/openshare">
 						<span class="btn__icon fa fa-github"></span>
 						GitHub
 
 						<div class="star-count">
 							<span class="star-count__icon fa fa-star"></span>
 							<span data-open-share-count="github-stars"
-						          data-open-share-count-repo="dsurgeons/OpenShare"
+						          data-open-share-count-repo="OpenShare/openshare"
 						          class="star-count__num"></span>
 					  </div>
 					</a>
@@ -208,7 +195,7 @@
 
 	<div class="newsletter">
 		<div class="newsletter__inner">
-			<h2 class="newsletter__title">Get the latest OpenShare integrations, <span class="newsletter__emphasis"><span class="fa fa-instagram"></span> Instagram</span> coming soon...</h2>
+			<h2 class="newsletter__title">Get the latest OpenShare integrations</h2>
 			<form class="newsletter__form" action="//fransland.us1.list-manage.com/subscribe/post?u=6a140f08bdc3761f4eea1d618&amp;id=25a1788863" method="POST" target="_blank" validate>
 				<input class="newsletter__input" name="EMAIL" type="email" required placeholder="Email address..." />
 				<input class="newsletter__btn btn--pink" type="submit" value="Sign up" />
@@ -216,36 +203,11 @@
 		</div>
 	</div>
 
-	<div class="banner" id="features" href="http://www.digitalsurgeons.com/thoughts">
-		<div class="banner__inner">
-			<a class="banner__counts open-share-example--counts" href="#"
-			data-open-share="twitter"
-			data-open-share-url="https://openshare.social"
-			data-open-share-via="digitalsurgeons"
-			data-open-share-text="#OpenShare, customizable API wrappers for social platforms -">
-
-			<span class="open-share-example__icon socicon-twitter"></span>
-			<span class="open-share-example__count"
-			data-open-share-count="twitter"
-			data-open-share-key="dstweets"
-			data-open-share-count-url="https://openshare.social">
-			</span>
-			</a>
-
-			<p class="banner__title">Twitter removed share counts so we brought them back!</p>
-
-			<p class="banner__body">
-				Sign up with OpenShare and <strong class="banner__emphasis">bring Twitter share counts back</strong>
-			</p>
-			<p><a class="btn--pink banner__btn" href="/twitter/auth">Activate Twitter Counts</a></p>
-		</div>
-	</div>
-
 	<section class="features">
 		<article class="feature">
 			<div class="feature__col--large-right">
 				<div class="feature__align">
-					<img class="feature__img-tag" src="/img/img-code.png" />
+					<img class="feature__img-tag" src="dist/img/img-code.png" />
 				</div>
 			</div>
 			<div class="feature__col--small">
@@ -259,7 +221,7 @@
 						overrides, no cascade of !important hell, <strong>just straight up HTML</strong>
 						ready for you to style.
 					</p>
-					<a class="feature__link" href="https://github.com/dsurgeons/OpenShare/wiki">Read full docs &raquo;</a>
+					<a class="feature__link" href="https://github.com/OpenShare/openshare/wiki">Read full docs &raquo;</a>
 					<a class="feature__link" href="https://openshare.social/examples.html">Check out the examples &raquo;</a>
 				</div>
 			</div>
@@ -267,7 +229,7 @@
 		<article class="feature">
 			<div class="feature__col--small">
 				<div class="feature__align--center">
-					<img class="feature__img-tag" src="/img/img-phone.png" />
+					<img class="feature__img-tag" src="dist/img/img-phone.png" />
 				</div>
 			</div>
 			<div class="feature__col--large-center">
@@ -282,14 +244,14 @@
 						provide this feature, so instead, OpenShare can optionally build <strong>iOS-specific
 						URL schemes</strong> before defaulting to the web.
 					</p>
-					<a class="feature__link" href="https://github.com/dsurgeons/OpenShare/wiki">Read full docs &raquo;</a>
+					<a class="feature__link" href="https://github.com/OpenShare/openshare/wiki">Read full docs &raquo;</a>
 				</div>
 			</div>
 		</article>
 		<article class="feature">
 			<div class="feature__col--large-right">
 				<div class="feature__align--center">
-					<img class="feature__img-tag" src="/img/img-data.png" />
+					<img class="feature__img-tag" src="dist/img/img-data.png" />
 				</div>
 			</div>
 			<div class="feature__col--small">
@@ -304,14 +266,14 @@
 						tags onto your page or retarget your users for profit. <strong>Your data
 						is your data.</strong>
 					</p>
-					<a class="feature__link" href="https://github.com/dsurgeons/OpenShare/wiki">Read full docs &raquo;</a>
+					<a class="feature__link" href="https://github.com/OpenShare/openshare/wiki">Read full docs &raquo;</a>
 				</div>
 			</div>
 		</article>
 		<article class="feature">
 			<div class="feature__col--small">
 				<div class="feature__align">
-					<img class="feature__img-tag" src="/img/img-analytics.png" />
+					<img class="feature__img-tag" src="dist/img/img-analytics.png" />
 				</div>
 			</div>
 			<div class="feature__col--large-center">
@@ -327,7 +289,7 @@
 						with your applications. What you do with that data is completely
 						up to you.
 					</p>
-					<a class="feature__link" href="https://github.com/dsurgeons/OpenShare/wiki">Read full docs &raquo;</a>
+					<a class="feature__link" href="https://github.com/OpenShare/openshare/wiki">Read full docs &raquo;</a>
 				</div>
 			</div>
 		</article>
@@ -346,11 +308,6 @@
 			data-open-share-text="#OpenShare, customizable API wrappers for social platforms">
 
 				<span class="open-share-example__icon socicon-twitter"></span>
-				<span class="open-share-example__count"
-				data-open-share-count="twitter"
-				data-open-share-key="dstweets"
-				data-open-share-count-url="https://openshare.social">
-				</span>
 			</a>
 
 			<a class="open-share-example"
@@ -397,12 +354,12 @@
 				Open<strong class="footer__logo-strong">Share</strong>
 			</a>
 			<a class="footer__ds" href="http://www.digitalsurgeons.com">
-				<img src="/img/img-digitalsurgeons.png" alt="Digital Marketing Agency" title="Digital Marketing Agency" />
+				<img src="dist/img/img-digitalsurgeons.png" alt="Digital Marketing Agency" title="Digital Marketing Agency" />
 			</a>
 		</div>
 	</footer>
 
-	<script src="/bundle.js"></script>
+	<script src="dist/bundle.js"></script>
 
 	<script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
