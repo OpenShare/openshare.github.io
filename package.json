@@ -1,7 +1,8 @@
 {
   "name": "openshare.social",
+  "private": true,
   "version": "1.0.0",
-  "description": "Starting point for DS Node.js projects.",
+  "description": "website for openshare.social",
   "main": "index.js",
   "browser": {
     "level": "level-browserify"
@@ -19,17 +20,15 @@
     ]
   },
   "scripts": {
-    "start": "node index.js",
-    "watch:js": "watchify browser/js/index.js -o browser/dist/bundle.js -dv",
-    "watch:css": "node-sass -w browser/scss/main.scss browser/dist/bundle.css",
+    "start": "npm run watch",
+    "watch:js": "watchify js/index.js -o dist/bundle.js -dv",
+    "watch:css": "node-sass -w scss/main.scss dist/bundle.css",
     "watch": "npm run watch:js & npm run watch:css",
-    "build:js": "browserify browser/js/index.js -g uglifyify | uglifyjs -cm > browser/dist/bundle.js",
-    "build:css": "node-sass browser/scss/main.scss browser/dist/bundle.css",
+    "build:js": "browserify js/index.js -g uglifyify | uglifyjs -cm > dist/bundle.js",
+    "build:css": "node-sass scss/main.scss dist/bundle.css",
     "build": "npm run build:js & npm run build:css",
-    "dev": "npm run watch & npm start",
-    "production": "npm run build & npm start",
-    "lint": "eslint **/*.js",
-    "baitAndSwitch": "standard-format -w **/*.js"
+    "dev": "npm run watch",
+    "production": "npm run build & npm start"
   },
   "keywords": [
     "openshare.social"
@@ -76,13 +75,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dsurgeons/ds-node-boilerplate.git"
+    "url": "git+https://github.com/OpenShare/openshare.social.git"
   },
   "bugs": {
-    "url": "https://github.com/dsurgeons/ds-node-boilerplate/issues"
+    "url": "https://github.com/OpenShare/openshare.social/issues"
   },
-  "homepage": "https://github.com/dsurgeons/ds-node-boilerplate#readme",
-  "directories": {
-    "test": "test"
-  }
+  "homepage": "https://github.com/OpenShare/openshare.social#readme"
 }
